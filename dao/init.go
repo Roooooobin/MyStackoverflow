@@ -1,10 +1,12 @@
-package main
+package dao
 
 import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+var MyDB = getDB()
 
 func getDB() *gorm.DB {
 
