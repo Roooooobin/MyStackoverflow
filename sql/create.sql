@@ -68,7 +68,6 @@ CREATE TABLE `TopicHierarchy` (
                                  `parent_tid` int NOT NULL,
                                  PRIMARY KEY (`tid`,`parent_tid`),
                                  KEY `f_th_ptid_idx` (`parent_tid`),
-                                 CONSTRAINT `f_th_ptid` FOREIGN KEY (`parent_tid`) REFERENCES `Topics` (`tid`),
                                  CONSTRAINT `f_th_tid` FOREIGN KEY (`tid`) REFERENCES `Topics` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `Topics` (
