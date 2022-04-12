@@ -63,7 +63,7 @@ CREATE TABLE `QuestionTopic` (
                                  CONSTRAINT `f_qt_qid` FOREIGN KEY (`qid`) REFERENCES `Questions` (`qid`),
                                  CONSTRAINT `f_qt_tid` FOREIGN KEY (`tid`) REFERENCES `Topics` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-CREATE TABLE `TopicHierachy` (
+CREATE TABLE `TopicHierarchy` (
                                  `tid` int NOT NULL,
                                  `parent_tid` int NOT NULL,
                                  PRIMARY KEY (`tid`,`parent_tid`),
@@ -80,14 +80,13 @@ CREATE TABLE `Topics` (
 CREATE TABLE `Users` (
                          `uid` int NOT NULL AUTO_INCREMENT,
                          `username` varchar(45) NOT NULL,
-                         `status` varchar(20) DEFAULT 'Basic',
+                         `status` varchar(20) NOT NULL DEFAULT 'Basic',
                          `email` varchar(100) NOT NULL,
                          `password` varchar(255) NOT NULL,
                          `city` varchar(45) NOT NULL,
                          `state` varchar(45) NOT NULL,
                          `country` varchar(45) NOT NULL,
-                         `profile` varchar(200) DEFAULT NULL,
+                         `profile` varchar(200) NOT NULL DEFAULT '',
                          PRIMARY KEY (`uid`),
                          UNIQUE KEY `index2` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
