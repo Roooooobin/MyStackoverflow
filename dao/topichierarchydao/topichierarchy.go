@@ -10,7 +10,7 @@ import (
 
 var tableTopicHierarchy = "TopicHierarchy"
 
-func Insert(v model.Topic) error {
+func Insert(v model.TopicHierarchy) error {
 
 	if err := dao.MyDB.Table(tableTopicHierarchy).Create(&v).Error; err != nil {
 		fmt.Println("insertion failed: ", err)
