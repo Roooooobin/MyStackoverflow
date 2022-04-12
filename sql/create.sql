@@ -22,7 +22,7 @@ CREATE TABLE `Answers` (
                            CONSTRAINT `f_a_qid` FOREIGN KEY (`qid`) REFERENCES `Questions` (`qid`),
                            CONSTRAINT `f_a_uid` FOREIGN KEY (`uid`) REFERENCES `Users` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-CREATE TABLE `AnswerTopic` (
+CREATE TABLE `AnswerTopics` (
                                `aid` int NOT NULL,
                                `tid` int NOT NULL,
                                PRIMARY KEY (`aid`,`tid`),
@@ -55,7 +55,7 @@ CREATE TABLE `Questions` (
                              CONSTRAINT `f_q_aid` FOREIGN KEY (`best_aid`) REFERENCES `Answers` (`aid`),
                              CONSTRAINT `f_q_uid` FOREIGN KEY (`uid`) REFERENCES `Users` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-CREATE TABLE `QuestionTopic` (
+CREATE TABLE `QuestionTopics` (
                                  `qid` int NOT NULL,
                                  `tid` int NOT NULL,
                                  PRIMARY KEY (`qid`,`tid`),
