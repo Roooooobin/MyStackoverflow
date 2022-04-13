@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
-	"MyStackoverflow/dao/topichierarchydao"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -33,15 +33,7 @@ func AddQuestion(c *gin.Context) {
 	// needs to find all related topics by the hierarchy and insert into table `QuestionTopic`
 	tidStr := c.PostForm("tid")
 	rootTid, _ := strconv.Atoi(tidStr)
-	tids := make([]int, 0)
-	// TODO: will be coded into pre-computed cache later
-	for rootTid != 0 {
-		tids = append(tids, rootTid)
-		topic, _ := topichierarchydao.Find("tid = ?", rootTid)
-		if topic != nil {
-			rootTid = topic.ParentTid
-		}
-	}
+	tids := cache.ParentTopics[rootTid]
 	for _, tid := range tids {
 		//fmt.Println(tid)
 		questionTopic := model.QuestionTopic{

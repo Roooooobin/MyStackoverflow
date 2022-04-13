@@ -1,6 +1,7 @@
 package main
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/handler"
 	"github.com/gin-gonic/gin"
 )
@@ -27,6 +28,9 @@ func main() {
 			handler.AddQuestion(c)
 		})
 	}
+
+	// pre-computed cache
+	cache.Init()
 	// listen and serve on 0.0.0.0:8080
 	err := r.Run()
 	if err != nil {
