@@ -79,7 +79,7 @@ CREATE TABLE `Topics` (
 CREATE TABLE `Users` (
                          `uid` int NOT NULL AUTO_INCREMENT,
                          `username` varchar(45) NOT NULL,
-                         `status` varchar(20) NOT NULL DEFAULT 'Basic',
+                         `status` varchar(20) NOT NULL DEFAULT 'basic',
                          `email` varchar(100) NOT NULL,
                          `password` varchar(255) NOT NULL,
                          `city` varchar(45) NOT NULL,
