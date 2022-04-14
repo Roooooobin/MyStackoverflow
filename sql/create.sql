@@ -47,6 +47,7 @@ CREATE TABLE `Questions` (
                              `time` datetime DEFAULT CURRENT_TIMESTAMP,
                              `is_resolved` tinyint DEFAULT '0',
                              `best_aid` int DEFAULT NULL,
+                             `likes` int DEFAULT '0',
                              PRIMARY KEY (`qid`),
                              KEY `f_user_idx` (`uid`),
                              KEY `f_q_aid_idx` (`best_aid`),

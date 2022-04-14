@@ -8,6 +8,7 @@ type Question struct {
 	Title      string
 	Body       string
 	Time       time.Time `gorm:"autoCreateTime"`
-	IsResolved byte
-	BestAid    int `gorm:"default:null"`
+	IsResolved byte      `gorm:"default:0"`
+	BestAid    int       `gorm:"default:null"`
+	Likes      int       `gorm:"default:0"`
 }
