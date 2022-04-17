@@ -1,19 +1,25 @@
 package handler
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/dao/topichierarchydao"
 	"MyStackoverflow/dao/topicsdao"
 	"MyStackoverflow/model"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 )
 
 func AddTopic(c *gin.Context) {
 	topicName := c.PostForm("topic")
-	topic := model.Topic{TopicName: topicName}
-	err := topicsdao.Insert(topic)
-	if err != nil {
-		return
+	_, err := topicsdao.Find("topic_name = ?", topicName)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		topic := model.Topic{TopicName: topicName}
+		err = topicsdao.Insert(topic)
+		if err != nil {
+			return
+		}
 	}
 	t, err := topicsdao.Find("topic_name = ?", topicName)
 	if err != nil {
@@ -29,4 +35,5 @@ func AddTopic(c *gin.Context) {
 	if err != nil {
 		return
 	}
+	cache.Init()
 }
