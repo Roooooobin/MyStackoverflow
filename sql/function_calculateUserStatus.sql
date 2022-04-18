@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` FUNCTION `calculateUserStatus`(id int) RETURNS varchar(20) CHARSET utf8mb4
+CREATE FUNCTION `calculateUserStatus`(id int) RETURNS varchar(20) CHARSET utf8mb4
 BEGIN
     DECLARE i, cnt_answers int default 0;
     DECLARE points int default 0;
