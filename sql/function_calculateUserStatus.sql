@@ -4,30 +4,30 @@ BEGIN
     DECLARE points int default 0;
     DECLARE total_likes, total_best_answer int default 0;
     SET total_likes = (
-        SELECT sum(likes)
+        SELECT ifnull(sum(likes), 0)
         FROM Answers
         WHERE uid = id
     );
     # double points for likes for the answer posted within a month
     SET total_likes = total_likes + (
-        SELECT sum(likes)
+        SELECT ifnull(sum(likes), 0)
         FROM Answers
         WHERE uid = id AND DATE_SUB(now(), INTERVAL 1 MONTH) <= time
     );
     # add likes for question, also double points if posted within a month
     SET total_likes = total_likes + (
-        SELECT sum(likes)
+        SELECT ifnull(sum(likes), 0)
         FROM Questions
         WHERE uid = id
     ) + (
-                          SELECT sum(likes)
+                          SELECT ifnull(sum(likes), 0)
                           FROM Questions
                           WHERE uid = id AND DATE_SUB(now(), INTERVAL 1 MONTH) <= time
                       );
     SET total_best_answer = (
-        SELECT count(is_best)
+        SELECT count(*)
         FROM Answers
-        WHERE uid = id
+        WHERE uid = id and is_best = 1
     );
     SET points = total_likes + 100 * total_best_answer;
     IF (points <= 200) then
