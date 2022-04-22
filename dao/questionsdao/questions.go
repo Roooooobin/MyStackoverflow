@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var tableQuestions = "Questions"
+var TableQuestions = "Questions"
 
 func Insert(v model.Question) error {
 
-	if err := dao.MyDB.Table(tableQuestions).Create(&v).Error; err != nil {
+	if err := dao.MyDB.Table(TableQuestions).Create(&v).Error; err != nil {
 		fmt.Println("insertion failed: ", err)
 		return err
 	}
@@ -22,7 +22,7 @@ func Insert(v model.Question) error {
 func Find(where string, values ...interface{}) (*model.Question, error) {
 
 	question := &model.Question{}
-	res := dao.MyDB.Table(tableQuestions).Where(where, values...).First(&question)
+	res := dao.MyDB.Table(TableQuestions).Where(where, values...).First(&question)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("record not found")
 	}
@@ -32,7 +32,7 @@ func Find(where string, values ...interface{}) (*model.Question, error) {
 func List(where string, values ...interface{}) ([]*model.Question, error) {
 
 	questions := make([]*model.Question, 0)
-	res := dao.MyDB.Table(tableQuestions).Where(where, values...).Find(&questions)
+	res := dao.MyDB.Table(TableQuestions).Where(where, values...).Find(&questions)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("record not found")
 	}
@@ -41,7 +41,7 @@ func List(where string, values ...interface{}) ([]*model.Question, error) {
 
 func Update(updateMap map[string]interface{}, where string, values ...interface{}) error {
 
-	res := dao.MyDB.Table(tableQuestions).Where(where, values...).Updates(updateMap)
+	res := dao.MyDB.Table(TableQuestions).Where(where, values...).Updates(updateMap)
 	if res.Error != nil {
 		return res.Error
 	}

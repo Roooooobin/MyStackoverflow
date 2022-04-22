@@ -2,7 +2,10 @@ package main
 
 import (
 	"MyStackoverflow/cache"
-	"MyStackoverflow/handler"
+	"MyStackoverflow/handler/answer"
+	"MyStackoverflow/handler/question"
+	"MyStackoverflow/handler/topic"
+	"MyStackoverflow/handler/user"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,21 +14,40 @@ func main() {
 	groupUser := r.Group("/user")
 	{
 		groupUser.POST("/add", func(c *gin.Context) {
-			handler.AddUser(c)
+			user.AddUser(c)
 		})
 	}
 
 	groupTopic := r.Group("/topic")
 	{
 		groupTopic.POST("/add", func(c *gin.Context) {
-			handler.AddTopic(c)
+			topic.AddTopic(c)
 		})
 	}
 
 	groupQuestion := r.Group("/question")
 	{
 		groupQuestion.POST("/add", func(c *gin.Context) {
-			handler.AddQuestion(c)
+			question.AddQuestion(c)
+		})
+		groupQuestion.POST("/like", func(c *gin.Context) {
+			question.LikeQuestion(c)
+		})
+		groupQuestion.GET("/list", func(c *gin.Context) {
+			question.ListQuestion(c)
+		})
+	}
+
+	groupAnswer := r.Group("/answer")
+	{
+		groupAnswer.POST("/add", func(c *gin.Context) {
+			answer.AddAnswer(c)
+		})
+		groupAnswer.POST("/like", func(c *gin.Context) {
+			answer.LikeAnswer(c)
+		})
+		groupAnswer.GET("/list", func(c *gin.Context) {
+			answer.ListAnswer(c)
 		})
 	}
 
