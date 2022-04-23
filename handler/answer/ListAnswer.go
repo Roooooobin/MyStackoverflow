@@ -27,6 +27,15 @@ func ListAnswer(c *gin.Context) {
 		aidList := strings.Split(aid, ",")
 		sql.Where("aid in (?)", aidList)
 	}
+	// sort by (time / likes)
+	sortByLikes, ok := c.GetQuery("sortByLikes")
+	if ok {
+		sql.Order("likes " + sortByLikes)
+	}
+	sortByTime, ok := c.GetQuery("sortByTime")
+	if ok {
+		sql.Order("time " + sortByTime)
+	}
 	answers := make([]*model.Answer, 0)
 	err := sql.Find(&answers).Error
 	if err != nil {

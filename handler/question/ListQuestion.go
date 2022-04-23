@@ -22,6 +22,14 @@ func ListQuestion(c *gin.Context) {
 		qidList := strings.Split(qid, ",")
 		sql.Where("qid in (?)", qidList)
 	}
+	sortByLikes, ok := c.GetQuery("sortByLikes")
+	if ok {
+		sql.Order("likes " + sortByLikes)
+	}
+	sortByTime, ok := c.GetQuery("sortByTime")
+	if ok {
+		sql.Order("time " + sortByTime)
+	}
 	questions := make([]*model.Question, 0)
 	err := sql.Find(&questions).Error
 	if err != nil {

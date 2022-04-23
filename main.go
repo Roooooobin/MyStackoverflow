@@ -16,6 +16,9 @@ func main() {
 		groupUser.POST("/add", func(c *gin.Context) {
 			user.AddUser(c)
 		})
+		groupUser.GET("/list", func(c *gin.Context) {
+			user.ListUser(c)
+		})
 	}
 
 	groupTopic := r.Group("/topic")
