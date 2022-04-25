@@ -1,4 +1,4 @@
-package main
+package function
 
 import (
 	"MyStackoverflow/dao"
@@ -108,10 +108,4 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 		}
 	}
 	return res
-}
-
-func main() {
-
-	m := CalculateRelevanceScoreForQuestion("mysql databases")
-	fmt.Println(m)
 }
