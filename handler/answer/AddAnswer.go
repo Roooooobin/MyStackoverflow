@@ -2,10 +2,12 @@ package answer
 
 import (
 	"MyStackoverflow/cache"
+	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/answertopicsdao"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
@@ -19,31 +21,35 @@ func AddAnswer(c *gin.Context) {
 	body := c.PostForm("body")
 	now := time.Now()
 	nowFormatted := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), 0, now.Location())
-	answer := model.Answer{
+	tidStr := c.PostForm("tid")
+	rootTid, _ := strconv.Atoi(tidStr)
+	// needs to find all related topics by the hierarchy and insert into table `AnswerTopic`
+	tids := cache.ParentTopics[rootTid]
+	answer := &model.Answer{
 		Uid:  uid,
 		Qid:  qid,
 		Body: body,
 		Time: nowFormatted,
 	}
-	if err := answersdao.Insert(answer); err != nil {
+	if err := dao.MyDB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Table(answersdao.TableAnswers).Create(answer).Error; err != nil {
+			return err
+		}
+		// get auto-generated qid
+		aid := answer.Aid
+		for _, tid := range tids {
+			answerTopic := &model.AnswerTopic{
+				Aid: aid,
+				Tid: tid,
+			}
+			err := tx.Table(answertopicsdao.TableAnswerTopics).Create(answerTopic).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
 		// TODO: handle error
 		return
-	}
-	// get auto-generated qid
-	answerJustInserted, _ := answersdao.Find("uid = ? and qid = ? and time = ?", uid, qid, nowFormatted)
-	// needs to find all related topics by the hierarchy and insert into table `QuestionTopic`
-	tidStr := c.PostForm("tid")
-	rootTid, _ := strconv.Atoi(tidStr)
-	tids := cache.ParentTopics[rootTid]
-	for _, tid := range tids {
-		//fmt.Println(tid)
-		answerTopic := model.AnswerTopic{
-			Aid: answerJustInserted.Aid,
-			Tid: tid,
-		}
-		err := answertopicsdao.Insert(answerTopic)
-		if err != nil {
-			return
-		}
 	}
 }

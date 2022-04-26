@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var tableQuestionTopics = "QuestionTopics"
+var TableQuestionTopics = "QuestionTopics"
 
 func Insert(v model.QuestionTopic) error {
 
-	if err := dao.MyDB.Table(tableQuestionTopics).Create(&v).Error; err != nil {
+	if err := dao.MyDB.Table(TableQuestionTopics).Create(&v).Error; err != nil {
 		fmt.Println("insertion failed: ", err)
 		return err
 	}
@@ -22,7 +22,7 @@ func Insert(v model.QuestionTopic) error {
 func Find(where string, values ...interface{}) (*model.QuestionTopic, error) {
 
 	questionTopic := &model.QuestionTopic{}
-	res := dao.MyDB.Table(tableQuestionTopics).Where(where, values...).First(&questionTopic)
+	res := dao.MyDB.Table(TableQuestionTopics).Where(where, values...).First(&questionTopic)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("record not found")
 	}
@@ -32,7 +32,7 @@ func Find(where string, values ...interface{}) (*model.QuestionTopic, error) {
 func List(where string, values ...interface{}) ([]*model.QuestionTopic, error) {
 
 	questionTopics := make([]*model.QuestionTopic, 0)
-	res := dao.MyDB.Table(tableQuestionTopics).Where(where, values...).Find(&questionTopics)
+	res := dao.MyDB.Table(TableQuestionTopics).Where(where, values...).Find(&questionTopics)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("record not found")
 	}
@@ -41,7 +41,7 @@ func List(where string, values ...interface{}) ([]*model.QuestionTopic, error) {
 
 func Update(updateMap map[string]interface{}, where string, values ...interface{}) error {
 
-	res := dao.MyDB.Table(tableQuestionTopics).Where(where, values...).Updates(updateMap)
+	res := dao.MyDB.Table(TableQuestionTopics).Where(where, values...).Updates(updateMap)
 	if res.Error != nil {
 		return res.Error
 	}

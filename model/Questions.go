@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Question struct {
-	Qid        int `gorm:"column:qid;"`
+	Qid        int `gorm:"column:qid; primaryKey"`
 	Uid        int `gorm:"column:uid;"`
 	Title      string
 	Body       string
