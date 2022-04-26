@@ -39,6 +39,9 @@ func main() {
 		groupQuestion.GET("/list", func(c *gin.Context) {
 			question.ListQuestion(c)
 		})
+		groupQuestion.GET("/listbykeyword", func(c *gin.Context) {
+			question.ListQuestionByKeyword(c)
+		})
 	}
 
 	groupAnswer := r.Group("/answer")

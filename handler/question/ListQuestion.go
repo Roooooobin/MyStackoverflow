@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// ListQuestion list questions with uid or qid(s)
+// ListQuestion list questions by uid or qid(s)
 func ListQuestion(c *gin.Context) {
 
 	sql := dao.MyDB.Table(questionsdao.TableQuestions)
