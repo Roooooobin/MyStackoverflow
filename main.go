@@ -55,6 +55,12 @@ func main() {
 		groupAnswer.GET("/list", func(c *gin.Context) {
 			answer.ListAnswer(c)
 		})
+		groupAnswer.POST("/select", func(c *gin.Context) {
+			answer.SelectBest(c)
+		})
+		groupAnswer.POST("/rate", func(c *gin.Context) {
+			answer.RateAnswer(c)
+		})
 	}
 
 	// pre-computed cache
