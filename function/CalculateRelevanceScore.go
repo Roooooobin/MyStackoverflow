@@ -42,7 +42,7 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 	db := dao.MyDB
 	// relevance score for title of the question
 	var maxScore float64
-	err := db.Raw("select max(match(title) against('mysql')) from Questions").Scan(&maxScore).Error
+	err := db.Raw("select max(match(title) against(?)) from Questions", keyword).Scan(&maxScore).Error
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -55,7 +55,7 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 		_ = rows.Close()
 	}()
 	// relevance score for body of the question
-	err = db.Raw("select max(match(body) against('mysql')) from Questions").Scan(&maxScore).Error
+	err = db.Raw("select max(match(body) against(?)) from Questions", keyword).Scan(&maxScore).Error
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -66,7 +66,7 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 	res = scanAndSum(rows, res, maxScore, weightMap["question_body"])
 	// relevance score for body of the answer
 	var maxAnswerScore float64
-	rows, err = db.Raw("select sum(match(body) against('mysql')) from Answers group by qid").Rows()
+	rows, err = db.Raw("select sum(match(body) against(?)) from Answers group by qid", keyword).Rows()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -81,7 +81,7 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 			maxAnswerScore = score
 		}
 	}
-	rows, err = db.Raw("select qid, sum(match(body) against('mysql')) from Answers group by qid").Rows()
+	rows, err = db.Raw("select qid, sum(match(body) against(?)) from Answers group by qid", keyword).Rows()
 	if err != nil {
 		fmt.Println(err)
 	}
