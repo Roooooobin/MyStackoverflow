@@ -3,6 +3,7 @@ package main
 import (
 	"MyStackoverflow/cache"
 	"MyStackoverflow/handler/answer"
+	"MyStackoverflow/handler/keyword_search"
 	"MyStackoverflow/handler/question"
 	"MyStackoverflow/handler/topic"
 	"MyStackoverflow/handler/user"
@@ -42,9 +43,6 @@ func main() {
 		groupQuestion.GET("/list", func(c *gin.Context) {
 			question.ListQuestion(c)
 		})
-		groupQuestion.GET("/listbykeyword", func(c *gin.Context) {
-			question.ListQuestionByKeyword(c)
-		})
 	}
 
 	groupAnswer := r.Group("/answer")
@@ -63,6 +61,13 @@ func main() {
 		})
 		groupAnswer.POST("/rate", func(c *gin.Context) {
 			answer.RateAnswer(c)
+		})
+	}
+
+	groupKeyword := r.Group("/keyword_search")
+	{
+		groupKeyword.GET("/list", func(c *gin.Context) {
+			keyword_search.ListByKeyword(c)
 		})
 	}
 
