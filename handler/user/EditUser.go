@@ -2,8 +2,8 @@ package user
 
 import (
 	"MyStackoverflow/dao/usersdao"
+	"MyStackoverflow/function"
 	"github.com/gin-gonic/gin"
-	"strings"
 )
 
 func EditUser(c *gin.Context) {
@@ -14,31 +14,28 @@ func EditUser(c *gin.Context) {
 		return
 	}
 	updateMap := make(map[string]interface{})
-	checkNotEmpty := func(s string) bool {
-		return strings.Trim(s, " ") != ""
-	}
 	username := c.PostForm("username")
-	if checkNotEmpty(username) {
+	if function.CheckNotEmpty(username) {
 		updateMap["username"] = username
 	}
 	email := c.PostForm("email")
-	if checkNotEmpty(email) {
+	if function.CheckNotEmpty(email) {
 		updateMap["email"] = email
 	}
 	password := c.PostForm("password")
-	if checkNotEmpty(password) {
+	if function.CheckNotEmpty(password) {
 		updateMap["password"] = password
 	}
 	city := c.PostForm("city")
-	if checkNotEmpty(city) {
+	if function.CheckNotEmpty(city) {
 		updateMap["city"] = city
 	}
 	state := c.PostForm("state")
-	if checkNotEmpty(state) {
+	if function.CheckNotEmpty(state) {
 		updateMap["state"] = state
 	}
 	country := c.PostForm("country")
-	if checkNotEmpty(country) {
+	if function.CheckNotEmpty(country) {
 		updateMap["country"] = country
 	}
 	profile, ok := c.GetPostForm("profile")

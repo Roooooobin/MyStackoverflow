@@ -4,25 +4,109 @@ import (
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/questionsdao"
+	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 )
+
+func getUidSetFromUsernames(onlyUser string) map[int]struct{} {
+
+	uidSet := make(map[int]struct{})
+	if function.CheckNotEmpty(onlyUser) {
+		usernames := strings.Split(onlyUser, ",")
+		sqlStatement := "select uid from Users where username in (?)"
+		rows, err := dao.MyDB.Table(usersdao.TableUsers).Raw(sqlStatement, usernames).Rows()
+		if err != nil {
+			return map[int]struct{}{}
+		}
+		for rows.Next() {
+			var uid int
+			err = rows.Scan(&uid)
+			if err != nil {
+				fmt.Println(err)
+				return map[int]struct{}{}
+			}
+			uidSet[uid] = struct{}{}
+		}
+	}
+	return uidSet
+}
+
+// extra options to filter questions, return true if passed all filters
+func questionFilters(question *model.Question, isResolved, likesStr string, userSet map[int]struct{}) bool {
+
+	if function.CheckNotEmpty(isResolved) && question.IsResolved != 1 {
+		return false
+	}
+	// the question is not posted by any user you look for, return false
+	if len(userSet) != 0 {
+		_, ok := userSet[question.Uid]
+		if !ok {
+			return false
+		}
+	}
+	if function.CheckNotEmpty(likesStr) {
+		likes, err := strconv.Atoi(likesStr)
+		if err == nil {
+			if question.Likes < likes {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// extra options to filter answers, return true if passed all filters
+func answerFilters(answer *model.Answer, isBest, likesStr string, userSet map[int]struct{}) bool {
+
+	if function.CheckNotEmpty(isBest) && answer.IsBest != 1 {
+		return false
+	}
+	// the answer is not posted by any user you look for, return false
+	if len(userSet) != 0 {
+		_, ok := userSet[answer.Uid]
+		if !ok {
+			return false
+		}
+	}
+	if function.CheckNotEmpty(likesStr) {
+		likes, err := strconv.Atoi(likesStr)
+		if err == nil {
+			if answer.Likes < likes {
+				return false
+			}
+		}
+	}
+	return true
+}
 
 func ListByKeyword(c *gin.Context) {
 	/*
 		list questions / answers / both by keyword
 	*/
 	keyword := c.Query("keyword")
-	if strings.Trim(keyword, " ") == "" {
+	if !function.CheckNotEmpty(keyword) {
 		return
 	}
 	sortByTime := c.Query("sortByTime")
 	sortByLikes := c.Query("sortByLikes")
+	// filter questions that are resolved
+	isResolved := c.Query("isResolved")
+	questionOnlyUsers := c.Query("questionOnlyUsers")
+	questionUidSet := getUidSetFromUsernames(questionOnlyUsers)
+	questionLikes := c.Query("questionLikes")
+	// filter answers that are best
+	isBest := c.Query("isBest")
+	// filter answers only posted by this(these) user(s) with usernames, separated by ','
+	answerOnlyUsers := c.Query("answerOnlyUsers")
+	answerUidSet := getUidSetFromUsernames(answerOnlyUsers)
+	answerLikes := c.Query("answerLikes")
 	data := make(map[string]interface{})
 	_, ok := c.GetQuery("onlyAnswers")
 	if !ok {
@@ -36,7 +120,9 @@ func ListByKeyword(c *gin.Context) {
 		questions := make([]*model.Question, 0)
 		for _, question := range questionsAll {
 			if questionScoreMap[question.Qid] > 0 {
-				questions = append(questions, question)
+				if questionFilters(question, isResolved, questionLikes, questionUidSet) {
+					questions = append(questions, question)
+				}
 			}
 		}
 		sort.Slice(questions, func(i, j int) bool {
@@ -75,7 +161,9 @@ func ListByKeyword(c *gin.Context) {
 		answers := make([]*model.Answer, 0)
 		for _, answer := range answersAll {
 			if answerScoreMap[answer.Aid] > 0 {
-				answers = append(answers, answer)
+				if answerFilters(answer, isBest, answerLikes, answerUidSet) {
+					answers = append(answers, answer)
+				}
 			}
 		}
 		sort.Slice(answers, func(i, j int) bool {
