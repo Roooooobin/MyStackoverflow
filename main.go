@@ -43,6 +43,9 @@ func main() {
 		groupQuestion.GET("/list", func(c *gin.Context) {
 			question.ListQuestion(c)
 		})
+		groupQuestion.POST("/edit", func(c *gin.Context) {
+			question.EditQuestion(c)
+		})
 	}
 
 	groupAnswer := r.Group("/answer")
@@ -61,6 +64,9 @@ func main() {
 		})
 		groupAnswer.POST("/rate", func(c *gin.Context) {
 			answer.RateAnswer(c)
+		})
+		groupAnswer.POST("/edit", func(c *gin.Context) {
+			answer.EditAnswer(c)
 		})
 	}
 
