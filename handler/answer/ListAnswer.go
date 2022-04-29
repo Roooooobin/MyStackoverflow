@@ -1,6 +1,7 @@
 package answer
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/model"
@@ -12,6 +13,12 @@ import (
 // ListAnswer list answer with aid(s) or qid(s) or uid
 func ListAnswer(c *gin.Context) {
 
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
 	sql := dao.MyDB.Table(answersdao.TableAnswers)
 	uid, ok := c.GetQuery("uid")
 	if ok {
@@ -39,9 +46,12 @@ func ListAnswer(c *gin.Context) {
 	answers := make([]*model.Answer, 0)
 	err := sql.Find(&answers).Error
 	if err != nil {
+		errMsg = err.Error()
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": answers,
-	})
+	if errMsg == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"data": answers,
+		})
+	}
 }

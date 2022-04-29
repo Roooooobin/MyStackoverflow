@@ -2,9 +2,11 @@ package answer
 
 import (
 	"MyStackoverflow/cache"
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/answertopicsdao"
+	"MyStackoverflow/function"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -14,15 +16,37 @@ import (
 
 func AddAnswer(c *gin.Context) {
 
-	uidStr := c.PostForm("uid")
-	uid, _ := strconv.Atoi(uidStr)
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
+	uidStr, ok := c.GetPostForm("uid")
+	if !ok || !function.CheckNotEmpty(uidStr) {
+		errMsg = "Must input uid"
+		return
+	}
+	uid, err := strconv.Atoi(uidStr)
+	if err != nil {
+		errMsg = "Input uid error: " + err.Error()
+		return
+	}
 	qidStr := c.PostForm("qid")
-	qid, _ := strconv.Atoi(qidStr)
+	qid, err := strconv.Atoi(qidStr)
+	if err != nil {
+		errMsg = "input qid error: " + err.Error()
+		return
+	}
 	body := c.PostForm("body")
 	now := time.Now()
 	nowFormatted := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), 0, now.Location())
 	tidStr := c.PostForm("tid")
-	rootTid, _ := strconv.Atoi(tidStr)
+	rootTid, err := strconv.Atoi(tidStr)
+	if err != nil {
+		errMsg = err.Error()
+		return
+	}
 	// needs to find all related topics by the hierarchy and insert into table `AnswerTopic`
 	tids := cache.ParentTopics[rootTid]
 	answer := &model.Answer{
@@ -31,8 +55,8 @@ func AddAnswer(c *gin.Context) {
 		Body: body,
 		Time: nowFormatted,
 	}
-	if err := dao.MyDB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Table(answersdao.TableAnswers).Create(answer).Error; err != nil {
+	if err = dao.MyDB.Transaction(func(tx *gorm.DB) error {
+		if err = tx.Table(answersdao.TableAnswers).Create(answer).Error; err != nil {
 			return err
 		}
 		// get auto-generated qid
@@ -42,14 +66,14 @@ func AddAnswer(c *gin.Context) {
 				Aid: aid,
 				Tid: tid,
 			}
-			err := tx.Table(answertopicsdao.TableAnswerTopics).Create(answerTopic).Error
+			err = tx.Table(answertopicsdao.TableAnswerTopics).Create(answerTopic).Error
 			if err != nil {
 				return err
 			}
 		}
 		return nil
 	}); err != nil {
-		// TODO: handle error
+		errMsg = "transaction: failed" + err.Error()
 		return
 	}
 }

@@ -3,6 +3,7 @@ package question
 import (
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao/questionsdao"
+	"MyStackoverflow/function"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -15,10 +16,22 @@ func EditQuestion(c *gin.Context) {
 			c.JSON(common.ErrorStatusCode, errMsg)
 		}
 	}()
-	uidStr := c.PostForm("uid")
-	uid, _ := strconv.Atoi(uidStr)
+	uidStr, ok := c.GetPostForm("uid")
+	if !ok || !function.CheckNotEmpty(uidStr) {
+		errMsg = "Must input uid"
+		return
+	}
+	uid, err := strconv.Atoi(uidStr)
+	if err != nil {
+		errMsg = "Input uid error: " + err.Error()
+		return
+	}
 	qidStr := c.PostForm("qid")
-	qid, _ := strconv.Atoi(qidStr)
+	qid, err := strconv.Atoi(qidStr)
+	if err != nil {
+		errMsg = "Input qid error: " + err.Error()
+		return
+	}
 	question, err := questionsdao.Find("qid = ?", qid)
 	if err != nil {
 		errMsg = err.Error()

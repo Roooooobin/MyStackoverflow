@@ -1,6 +1,7 @@
 package user
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/function"
 	"github.com/gin-gonic/gin"
@@ -8,9 +9,15 @@ import (
 
 func EditUser(c *gin.Context) {
 
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
 	uid, ok := c.GetPostForm("uid")
-	if !ok {
-		// TODO: error handling
+	if !ok || !function.CheckNotEmpty(uid) {
+		errMsg = "Must input uid"
 		return
 	}
 	updateMap := make(map[string]interface{})
@@ -44,6 +51,7 @@ func EditUser(c *gin.Context) {
 	}
 	err := usersdao.Update(updateMap, "uid = ?", uid)
 	if err != nil {
+		errMsg = err.Error()
 		return
 	}
 }

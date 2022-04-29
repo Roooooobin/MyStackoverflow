@@ -1,7 +1,9 @@
 package question
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao/questionlikesdao"
+	"MyStackoverflow/function"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -10,13 +12,32 @@ import (
 
 func LikeQuestion(c *gin.Context) {
 
-	uidStr := c.PostForm("uid")
-	uid, _ := strconv.Atoi(uidStr)
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
+	uidStr, ok := c.GetPostForm("uid")
+	if !ok || !function.CheckNotEmpty(uidStr) {
+		errMsg = "Must input uid"
+		return
+	}
+	uid, err := strconv.Atoi(uidStr)
+	if err != nil {
+		errMsg = "Input uid error: " + err.Error()
+		return
+	}
 	qidStr := c.PostForm("qid")
-	qid, _ := strconv.Atoi(qidStr)
-	_, err := questionlikesdao.Find("uid = ? and qid = ?", uid, qid)
+	qid, err := strconv.Atoi(qidStr)
+	if err != nil {
+		errMsg = "Input qid error: " + err.Error()
+		return
+	}
+	_, err = questionlikesdao.Find("uid = ? and qid = ?", uid, qid)
 	// already added a like
 	if err == nil {
+		errMsg = "Already liked this question."
 		return
 	}
 	questionLike := model.QuestionLike{
@@ -25,7 +46,7 @@ func LikeQuestion(c *gin.Context) {
 		Time: time.Now(),
 	}
 	if err = questionlikesdao.Insert(questionLike); err != nil {
-		// TODO: handle error
+		errMsg = err.Error()
 		return
 	}
 }

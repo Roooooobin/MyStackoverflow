@@ -1,6 +1,7 @@
 package user
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/model"
@@ -10,6 +11,12 @@ import (
 
 func ListUser(c *gin.Context) {
 
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
 	sql := dao.MyDB.Table(usersdao.TableUsers)
 	uid, ok := c.GetQuery("uid")
 	if ok {
@@ -18,9 +25,13 @@ func ListUser(c *gin.Context) {
 	users := make([]*model.User, 0)
 	err := sql.Find(&users).Error
 	if err != nil {
+		errMsg = err.Error()
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": users,
-	})
+	if errMsg == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"data": users,
+		})
+	}
+
 }

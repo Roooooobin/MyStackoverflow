@@ -1,6 +1,7 @@
 package question
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
@@ -13,6 +14,12 @@ import (
 // ListQuestion list questions by uid or qid(s)
 func ListQuestion(c *gin.Context) {
 
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
 	sql := dao.MyDB.Table(questionsdao.TableQuestions)
 	uid, ok := c.GetQuery("uid")
 	if ok {
@@ -37,6 +44,7 @@ func ListQuestion(c *gin.Context) {
 	questions := make([]*model.Question, 0)
 	err := sql.Find(&questions).Error
 	if err != nil {
+		errMsg = err.Error()
 		return
 	}
 	// filter questions only within the topic
@@ -44,6 +52,7 @@ func ListQuestion(c *gin.Context) {
 	if ok {
 		questionTopics, err := questiontopicsdao.List("tid = ?", tid)
 		if err != nil {
+			errMsg = err.Error()
 			return
 		}
 		qidSet := make(map[int]struct{})
@@ -58,7 +67,9 @@ func ListQuestion(c *gin.Context) {
 		}
 		questions = tmp
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": questions,
-	})
+	if errMsg == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"data": questions,
+		})
+	}
 }

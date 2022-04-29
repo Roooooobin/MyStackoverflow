@@ -1,6 +1,7 @@
 package keyword_search
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/questionsdao"
@@ -90,8 +91,15 @@ func ListByKeyword(c *gin.Context) {
 	/*
 		list questions / answers / both by keyword
 	*/
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
 	keyword := c.Query("keyword")
 	if !function.CheckNotEmpty(keyword) {
+		errMsg = "Input keyword can not be empty, please check and retry."
 		return
 	}
 	sortByTime := c.Query("sortByTime")
@@ -115,6 +123,7 @@ func ListByKeyword(c *gin.Context) {
 		questionsAll := make([]*model.Question, 0)
 		err := sql.Find(&questionsAll).Error
 		if err != nil {
+			errMsg = err.Error()
 			return
 		}
 		questions := make([]*model.Question, 0)
@@ -156,6 +165,7 @@ func ListByKeyword(c *gin.Context) {
 		answersAll := make([]*model.Answer, 0)
 		err := sql.Find(&answersAll).Error
 		if err != nil {
+			errMsg = err.Error()
 			return
 		}
 		answers := make([]*model.Answer, 0)
@@ -189,7 +199,9 @@ func ListByKeyword(c *gin.Context) {
 		}
 		data["answers"] = answers
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
+	if errMsg == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"data": data,
+		})
+	}
 }

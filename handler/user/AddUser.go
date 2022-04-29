@@ -1,12 +1,20 @@
 package user
 
 import (
+	"MyStackoverflow/common"
 	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
 )
 
 func AddUser(c *gin.Context) {
+
+	errMsg := ""
+	defer func() {
+		if errMsg != "" {
+			c.JSON(common.ErrorStatusCode, errMsg)
+		}
+	}()
 	username := c.PostForm("username")
 	email := c.PostForm("email")
 	password := c.PostForm("password")
