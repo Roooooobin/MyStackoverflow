@@ -2,6 +2,8 @@ package model
 
 import "time"
 
+var IsResolved = 1
+
 type Question struct {
 	Qid        int `gorm:"column:qid; primaryKey"`
 	Uid        int `gorm:"column:uid;"`

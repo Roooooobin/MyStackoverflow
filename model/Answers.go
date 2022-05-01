@@ -2,6 +2,8 @@ package model
 
 import "time"
 
+var IsBest = 1
+
 type Answer struct {
 	Aid    int `gorm:"column:aid; primaryKey"`
 	Qid    int `gorm:"column:qid"`
