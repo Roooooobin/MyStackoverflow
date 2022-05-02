@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -12,7 +12,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" exact element={<Home />} />
-        <Route path="/login"  exact element={<Login />} />
+        <Route path="/login" exact element={<Login />} />
         <Route path="/signup" exact element={<SignUp />} />
         <Route path="/result" exact element={<SearchResult />} />
         <Route path="/result/:q" exact element={<SearchResult />} />
