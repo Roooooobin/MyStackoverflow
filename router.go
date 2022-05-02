@@ -17,6 +17,9 @@ func RegisterRouter() *gin.Engine {
 		groupUser.POST("/add", func(c *gin.Context) {
 			user.AddUser(c)
 		})
+		groupUser.GET("/get", func(c *gin.Context) {
+			user.GetUser(c)
+		})
 		groupUser.GET("/list", func(c *gin.Context) {
 			user.ListUser(c)
 		})
@@ -40,6 +43,9 @@ func RegisterRouter() *gin.Engine {
 		groupQuestion.POST("/like", func(c *gin.Context) {
 			question.LikeQuestion(c)
 		})
+		groupQuestion.GET("/get", func(c *gin.Context) {
+			question.GetQuestion(c)
+		})
 		groupQuestion.GET("/list", func(c *gin.Context) {
 			question.ListQuestion(c)
 		})
@@ -55,6 +61,9 @@ func RegisterRouter() *gin.Engine {
 		})
 		groupAnswer.POST("/like", func(c *gin.Context) {
 			answer.LikeAnswer(c)
+		})
+		groupAnswer.GET("/get", func(c *gin.Context) {
+			answer.GetAnswer(c)
 		})
 		groupAnswer.GET("/list", func(c *gin.Context) {
 			answer.ListAnswer(c)

@@ -3,6 +3,7 @@ package question
 import (
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
+	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
 	"MyStackoverflow/model"
@@ -67,9 +68,45 @@ func ListQuestion(c *gin.Context) {
 		}
 		questions = tmp
 	}
+	// attach the number of answer
+	qids := make([]int, 0)
+	for _, question := range questions {
+		qids = append(qids, question.Qid)
+	}
+	answers, err := answersdao.List("qid in (?)", qids)
+	if err != nil {
+		errMsg = err.Error()
+		return
+	}
+	questionToAnswerNumMap := make(map[int]int)
+	for _, answer := range answers {
+		_, ok := questionToAnswerNumMap[answer.Qid]
+		if !ok {
+			questionToAnswerNumMap[answer.Qid] = 1
+		} else {
+			questionToAnswerNumMap[answer.Qid]++
+		}
+	}
+	questionWithAnswerNum := make([]*model.QuestionWithAnswerNum, 0)
+	for _, question := range questions {
+		numOfAnswer, ok := questionToAnswerNumMap[question.Qid]
+		if !ok {
+			numOfAnswer = 0
+		}
+		questionWithAnswerNum = append(questionWithAnswerNum, &model.QuestionWithAnswerNum{
+			Qid:         question.Qid,
+			Uid:         question.Uid,
+			Title:       question.Title,
+			Body:        question.Body,
+			Time:        question.Time,
+			IsResolved:  question.IsResolved,
+			Likes:       question.Likes,
+			NumOfAnswer: numOfAnswer,
+		})
+	}
 	if errMsg == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"data": questions,
+			"data": questionWithAnswerNum,
 		})
 	}
 }
