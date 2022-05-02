@@ -1,6 +1,7 @@
 package question
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
@@ -87,13 +88,28 @@ func ListQuestion(c *gin.Context) {
 			questionToAnswerNumMap[answer.Qid]++
 		}
 	}
-	questionWithAnswerNum := make([]*model.QuestionWithAnswerNum, 0)
+	// attach topics
+	questionToTopicsMap := make(map[int]string)
+	questionTopics, err := questiontopicsdao.List("qid in (?)", qids)
+	if err != nil {
+		errMsg = err.Error()
+		return
+	}
+	for _, questionTopic := range questionTopics {
+		_, ok := questionToTopicsMap[questionTopic.Qid]
+		if !ok {
+			questionToTopicsMap[questionTopic.Qid] = cache.TopicIDToName[questionTopic.Tid] + ","
+		} else {
+			questionToTopicsMap[questionTopic.Qid] += cache.TopicIDToName[questionTopic.Tid] + ","
+		}
+	}
+	questionWithDetails := make([]*model.QuestionWithDetails, 0)
 	for _, question := range questions {
 		numOfAnswer, ok := questionToAnswerNumMap[question.Qid]
 		if !ok {
 			numOfAnswer = 0
 		}
-		questionWithAnswerNum = append(questionWithAnswerNum, &model.QuestionWithAnswerNum{
+		questionWithDetails = append(questionWithDetails, &model.QuestionWithDetails{
 			Qid:         question.Qid,
 			Uid:         question.Uid,
 			Title:       question.Title,
@@ -102,11 +118,12 @@ func ListQuestion(c *gin.Context) {
 			IsResolved:  question.IsResolved,
 			Likes:       question.Likes,
 			NumOfAnswer: numOfAnswer,
+			Topics:      strings.TrimRight(questionToTopicsMap[question.Qid], ","),
 		})
 	}
 	if errMsg == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"data": questionWithAnswerNum,
+			"data": questionWithDetails,
 		})
 	}
 }

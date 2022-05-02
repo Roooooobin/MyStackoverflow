@@ -1,17 +1,21 @@
 package cache
 
 import (
+	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/topichierarchydao"
 	"MyStackoverflow/dao/topicsdao"
+	"MyStackoverflow/model"
 )
 
 // ParentTopics topic and all its parent topics
 var ParentTopics map[int][]int
 
-func Init() {
+func GetParentTopics() map[int][]int {
 
-	ParentTopics = make(map[int][]int)
-	allTopics, _ := topicsdao.List("tid > ?", 0)
+	sql := dao.MyDB.Table(topicsdao.TableTopics)
+	parentTopics := make(map[int][]int)
+	allTopics := make([]*model.Topic, 0)
+	sql.Find(&allTopics)
 	for _, topic := range allTopics {
 		rootTid := topic.Tid
 		tid := rootTid
@@ -37,6 +41,7 @@ func Init() {
 				par = t.ParentTid
 			}
 		}
-		ParentTopics[tid] = parentTids
+		parentTopics[tid] = parentTids
 	}
+	return parentTopics
 }

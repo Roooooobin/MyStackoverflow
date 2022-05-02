@@ -1,9 +1,11 @@
 package answer
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
+	"MyStackoverflow/dao/answertopicsdao"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -49,9 +51,42 @@ func ListAnswer(c *gin.Context) {
 		errMsg = err.Error()
 		return
 	}
+	aids := make([]int, 0)
+	for _, answer := range answers {
+		aids = append(aids, answer.Aid)
+	}
+	// attach topics
+	answerToTopicsMap := make(map[int]string)
+	answerTopics, err := answertopicsdao.List("aid in (?)", aids)
+	if err != nil {
+		errMsg = err.Error()
+		return
+	}
+	for _, answerTopic := range answerTopics {
+		_, ok := answerToTopicsMap[answerTopic.Aid]
+		if !ok {
+			answerToTopicsMap[answerTopic.Aid] = cache.TopicIDToName[answerTopic.Tid] + ","
+		} else {
+			answerToTopicsMap[answerTopic.Aid] += cache.TopicIDToName[answerTopic.Tid] + ","
+		}
+	}
+	answerWithDetails := make([]*model.AnswerWithDetails, 0)
+	for _, answer := range answers {
+		answerWithDetails = append(answerWithDetails, &model.AnswerWithDetails{
+			Aid:    answer.Aid,
+			Qid:    answer.Qid,
+			Uid:    answer.Uid,
+			Body:   answer.Body,
+			Time:   answer.Time,
+			IsBest: answer.IsBest,
+			Likes:  answer.Likes,
+			Rating: answer.Rating,
+			Topics: strings.TrimRight(answerToTopicsMap[answer.Aid], ","),
+		})
+	}
 	if errMsg == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"data": answers,
+			"data": answerWithDetails,
 		})
 	}
 }

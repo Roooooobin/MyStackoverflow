@@ -14,7 +14,8 @@ type Question struct {
 	Likes      int       `gorm:"default:0"`
 }
 
-type QuestionWithAnswerNum struct {
+// QuestionWithDetails question basic information + number of answers + topics
+type QuestionWithDetails struct {
 	Qid         int `gorm:"column:qid; primaryKey"`
 	Uid         int `gorm:"column:uid;"`
 	Title       string
@@ -23,4 +24,5 @@ type QuestionWithAnswerNum struct {
 	IsResolved  byte      `gorm:"default:0"`
 	Likes       int       `gorm:"default:0"`
 	NumOfAnswer int
+	Topics      string
 }

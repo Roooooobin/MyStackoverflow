@@ -7,6 +7,7 @@ import (
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 func ListUser(c *gin.Context) {
@@ -18,15 +19,20 @@ func ListUser(c *gin.Context) {
 		}
 	}()
 	sql := dao.MyDB.Table(usersdao.TableUsers)
-	uid, ok := c.GetQuery("uid")
+	uidStr, ok := c.GetQuery("uid")
 	if ok {
-		sql.Where("uid = ?", uid)
+		uids := strings.Split(uidStr, ",")
+		sql.Where("uid in (?)", uids)
 	}
 	users := make([]*model.User, 0)
 	err := sql.Find(&users).Error
 	if err != nil {
 		errMsg = err.Error()
 		return
+	}
+	// should not(no need either) return the password
+	for _, user := range users {
+		user.Password = ""
 	}
 	if errMsg == "" {
 		c.JSON(http.StatusOK, gin.H{

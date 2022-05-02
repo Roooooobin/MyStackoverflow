@@ -24,6 +24,8 @@ func GetUser(c *gin.Context) {
 		errMsg = err.Error()
 		return
 	}
+	// should not(no need either) return the password
+	user.Password = ""
 	if errMsg == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"data": user,
