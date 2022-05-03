@@ -6,7 +6,7 @@ import (
 	"MyStackoverflow/model"
 )
 
-var TopicIDToName map[int]string
+var TopicID2Name map[int]string
 
 func GetTopicNameByID() map[int]string {
 
