@@ -18,6 +18,7 @@ func GetAnswer(c *gin.Context) {
 	aid, ok := c.GetQuery("aid")
 	if !ok {
 		errMsg = "parameter aid must be passed"
+		return
 	}
 	answer, err := answersdao.Find("aid = ?", aid)
 	if err != nil {
