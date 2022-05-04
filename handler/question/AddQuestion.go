@@ -50,17 +50,18 @@ func AddQuestion(c *gin.Context) {
 			return err
 		}
 		qid := question.Qid
-		// get auto-generated qid
-		//questionJustInserted, _ := questionsdao.Find("uid = ? and time = ?", uid, nowFormatted)
 		// needs to find all related topics by the hierarchy and insert into table `QuestionTopic`
 		tidStr := c.PostForm("tid")
+		// if the question is not assigned to any topic, return
+		if !function.CheckNotEmpty(tidStr) {
+			return nil
+		}
 		rootTid, errR := strconv.Atoi(tidStr)
 		if errR != nil {
 			return errR
 		}
 		tids := cache.ParentTopics[rootTid]
 		for _, tid := range tids {
-			//fmt.Println(tid)
 			questionTopic := &model.QuestionTopic{
 				Qid: qid,
 				Tid: tid,

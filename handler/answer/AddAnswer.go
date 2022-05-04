@@ -41,14 +41,6 @@ func AddAnswer(c *gin.Context) {
 	body := c.PostForm("body")
 	now := time.Now()
 	nowFormatted := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), 0, now.Location())
-	tidStr := c.PostForm("tid")
-	rootTid, err := strconv.Atoi(tidStr)
-	if err != nil {
-		errMsg = err.Error()
-		return
-	}
-	// needs to find all related topics by the hierarchy and insert into table `AnswerTopic`
-	tids := cache.ParentTopics[rootTid]
 	answer := &model.Answer{
 		Uid:  uid,
 		Qid:  qid,
@@ -61,6 +53,17 @@ func AddAnswer(c *gin.Context) {
 		}
 		// get auto-generated qid
 		aid := answer.Aid
+		tidStr := c.PostForm("tid")
+		// if the answer is not assigned to any topic, return
+		if !function.CheckNotEmpty(tidStr) {
+			return nil
+		}
+		rootTid, err := strconv.Atoi(tidStr)
+		if err != nil {
+			return err
+		}
+		// needs to find all related topics by the hierarchy and insert into table `AnswerTopic`
+		tids := cache.ParentTopics[rootTid]
 		for _, tid := range tids {
 			answerTopic := &model.AnswerTopic{
 				Aid: aid,
