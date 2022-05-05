@@ -32,7 +32,7 @@ CREATE TABLE `Questions` (
                              FULLTEXT KEY `fullidx_question_body` (`body`),
                              FULLTEXT KEY `fullidx_title` (`title`),
                              CONSTRAINT `f_q_uid` FOREIGN KEY (`uid`) REFERENCES `Users` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Answers` (
                            `aid` int NOT NULL AUTO_INCREMENT,
