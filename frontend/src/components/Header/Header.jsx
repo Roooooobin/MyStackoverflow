@@ -17,13 +17,13 @@ function Header() {
         <SearchBar placeholder="Enter Your Question..." />
       </div>
       <div className="login-btn">
-        <button>
-          <Link to="/login">Login</Link>
-        </button>
-        <button>
-          <Link to="/signup">Sign Up</Link>
-        </button>
-      </div>
+          <button>
+            <Link to="/login">Login</Link>
+          </button>
+          <button>
+            <Link to="/signup">Sign Up</Link>
+          </button>
+        </div>
     </div>
   );
 }
