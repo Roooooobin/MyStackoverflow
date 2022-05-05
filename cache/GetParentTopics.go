@@ -45,3 +45,29 @@ func GetParentTopics() map[int][]int {
 	}
 	return parentTopics
 }
+
+// Topic2SubTopics topic and all its sub topics, only store two-level hierarchy
+var Topic2SubTopics map[int][]int
+
+func StoreSubTopics() map[int][]int {
+
+	sql := dao.MyDB.Table(topichierarchydao.TableTopicHierarchy)
+	topic2SubTopics := make(map[int][]int)
+	topicHierarchies := make([]*model.TopicHierarchy, 0)
+	sql.Find(&topicHierarchies)
+	for _, hierarchy := range topicHierarchies {
+		ptid := hierarchy.ParentTid
+		tid := hierarchy.Tid
+		if ptid == tid {
+			continue
+		}
+		l, ok := topic2SubTopics[ptid]
+		if !ok {
+			l = []int{tid}
+		} else {
+			l = append(l, tid)
+		}
+		topic2SubTopics[ptid] = l
+	}
+	return topic2SubTopics
+}

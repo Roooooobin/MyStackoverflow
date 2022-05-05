@@ -46,9 +46,11 @@ func EditAnswer(c *gin.Context) {
 	updateMap := map[string]interface{}{
 		"body": body,
 	}
-	err = answersdao.Update(updateMap, "aid = ?", aid)
-	if err != nil {
-		errMsg = err.Error()
-		return
+	if len(updateMap) > 0 {
+		err = answersdao.Update(updateMap, "aid = ?", aid)
+		if err != nil {
+			errMsg = err.Error()
+			return
+		}
 	}
 }

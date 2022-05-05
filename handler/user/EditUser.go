@@ -49,9 +49,11 @@ func EditUser(c *gin.Context) {
 	if ok {
 		updateMap["profile"] = profile
 	}
-	err := usersdao.Update(updateMap, "uid = ?", uid)
-	if err != nil {
-		errMsg = err.Error()
-		return
+	if len(updateMap) > 0 {
+		err := usersdao.Update(updateMap, "uid = ?", uid)
+		if err != nil {
+			errMsg = err.Error()
+			return
+		}
 	}
 }

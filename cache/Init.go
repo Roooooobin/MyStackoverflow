@@ -3,5 +3,6 @@ package cache
 func Init() {
 
 	ParentTopics = GetParentTopics()
-	TopicIDToName = GetTopicNameByID()
+	TopicID2Name = GetTopicNameByID()
+	Topic2SubTopics = StoreSubTopics()
 }

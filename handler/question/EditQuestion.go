@@ -54,8 +54,10 @@ func EditQuestion(c *gin.Context) {
 	if ok {
 		updateMap["is_resolved"] = 1
 	}
-	if err = questionsdao.Update(updateMap, "qid = ?", qid); err != nil {
-		errMsg = err.Error()
-		return
+	if len(updateMap) > 0 {
+		if err = questionsdao.Update(updateMap, "qid = ?", qid); err != nil {
+			errMsg = err.Error()
+			return
+		}
 	}
 }

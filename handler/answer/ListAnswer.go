@@ -65,9 +65,9 @@ func ListAnswer(c *gin.Context) {
 	for _, answerTopic := range answerTopics {
 		_, ok := answerToTopicsMap[answerTopic.Aid]
 		if !ok {
-			answerToTopicsMap[answerTopic.Aid] = cache.TopicIDToName[answerTopic.Tid] + ","
+			answerToTopicsMap[answerTopic.Aid] = cache.TopicID2Name[answerTopic.Tid] + ","
 		} else {
-			answerToTopicsMap[answerTopic.Aid] += cache.TopicIDToName[answerTopic.Tid] + ","
+			answerToTopicsMap[answerTopic.Aid] += cache.TopicID2Name[answerTopic.Tid] + ","
 		}
 	}
 	answerWithDetails := make([]*model.AnswerWithDetails, 0)

@@ -33,6 +33,9 @@ func RegisterRouter() *gin.Engine {
 		groupTopic.POST("/add", func(c *gin.Context) {
 			topic.AddTopic(c)
 		})
+		groupTopic.GET("/list", func(c *gin.Context) {
+			topic.ListTopic(c)
+		})
 	}
 
 	groupQuestion := r.Group("/question")

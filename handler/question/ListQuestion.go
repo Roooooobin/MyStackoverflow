@@ -49,10 +49,11 @@ func ListQuestion(c *gin.Context) {
 		errMsg = err.Error()
 		return
 	}
-	// filter questions only within the topic
+	// filter questions only within the topic(s)
 	tid, ok := c.GetQuery("tid")
 	if ok {
-		questionTopics, err := questiontopicsdao.List("tid = ?", tid)
+		tids := strings.Split(tid, ",")
+		questionTopics, err := questiontopicsdao.List("tid in (?)", tids)
 		if err != nil {
 			errMsg = err.Error()
 			return
@@ -98,9 +99,9 @@ func ListQuestion(c *gin.Context) {
 	for _, questionTopic := range questionTopics {
 		_, ok := questionToTopicsMap[questionTopic.Qid]
 		if !ok {
-			questionToTopicsMap[questionTopic.Qid] = cache.TopicIDToName[questionTopic.Tid] + ","
+			questionToTopicsMap[questionTopic.Qid] = cache.TopicID2Name[questionTopic.Tid] + ","
 		} else {
-			questionToTopicsMap[questionTopic.Qid] += cache.TopicIDToName[questionTopic.Tid] + ","
+			questionToTopicsMap[questionTopic.Qid] += cache.TopicID2Name[questionTopic.Tid] + ","
 		}
 	}
 	questionWithDetails := make([]*model.QuestionWithDetails, 0)
