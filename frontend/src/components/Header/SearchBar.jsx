@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-function SearchBar({ placeholder, data }) {
+function SearchBar({ placeholder }) {
   var query = "";
   const [searchQuery, setSearchQuery] = useState(query || "");
 
@@ -16,9 +16,10 @@ function SearchBar({ placeholder, data }) {
           value={searchQuery}
         />
         <div className="searchIcon">
-          <Link to={`/result/${searchQuery}`}>
+          <Link to={`/result/${searchQuery}`} onClick={this.forceUpdate()}>
             <FaSearch className="icon" />
           </Link>
+          
         </div>
       </div>
     </div>

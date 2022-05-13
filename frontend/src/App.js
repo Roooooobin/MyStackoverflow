@@ -25,7 +25,7 @@ class App extends React.Component {
                         element={<Login isLogin={this.handleLogin} />}
                     />
                     <Route path="/signup" exact element={<SignUp />} />
-                    <Route path="/result" element={<Result />} />
+                    <Route path="/result" exact element={<Result />} />
                     <Route path="/result/:q" exact element={<Result />} />
                     <Route path="/question/:qid" exact element={<Question />} />
                 </Routes>
