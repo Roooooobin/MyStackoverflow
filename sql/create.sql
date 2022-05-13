@@ -42,6 +42,7 @@ CREATE TABLE `Answers` (
                            `time` datetime DEFAULT CURRENT_TIMESTAMP,
                            `is_best` tinyint DEFAULT '0',
                            `likes` int DEFAULT '0',
+                           `rating` tinyint DEFAULT NULL,
                            PRIMARY KEY (`aid`),
                            KEY `idx_qid` (`qid`),
                            KEY `idx_user` (`uid`),
