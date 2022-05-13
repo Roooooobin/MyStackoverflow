@@ -1,10 +1,15 @@
 package answer
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
+	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
+	"MyStackoverflow/dao/answertopicsdao"
 	"MyStackoverflow/function"
+	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 )
 
@@ -45,6 +50,40 @@ func EditAnswer(c *gin.Context) {
 	body := c.PostForm("body")
 	updateMap := map[string]interface{}{
 		"body": body,
+	}
+	// modify tid
+	tidStr := c.PostForm("tid")
+	// if topics of the question need to be modified
+	if function.CheckNotEmpty(tidStr) {
+		errTx := dao.MyDB.Transaction(func(tx *gorm.DB) error {
+			// delete first and then add new topics
+			err := tx.Table(answertopicsdao.TableAnswerTopics).Where("aid = ?", aid).
+				Delete(&model.AnswerTopic{}).Error
+			if err != nil {
+				return err
+			}
+			// needs to find all related topics by the hierarchy and insert into table `QuestionTopic`
+			rootTid, errR := strconv.Atoi(tidStr)
+			if errR != nil {
+				return errR
+			}
+			tids := cache.ParentTopics[rootTid]
+			for _, tid := range tids {
+				answerTopic := &model.AnswerTopic{
+					Aid: aid,
+					Tid: tid,
+				}
+				err = tx.Table(answertopicsdao.TableAnswerTopics).Create(&answerTopic).Error
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		})
+		if errTx != nil {
+			errMsg = errTx.Error()
+			return
+		}
 	}
 	if len(updateMap) > 0 {
 		err = answersdao.Update(updateMap, "aid = ?", aid)

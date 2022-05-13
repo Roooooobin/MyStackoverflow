@@ -39,44 +39,6 @@ func getUidsFromUsernames(onlyUser string) []int {
 	return uids
 }
 
-// extra options to filter questions, return true if passed all filters
-func questionFilters(question *model.Question, likesStr string) bool {
-
-	if function.CheckNotEmpty(likesStr) {
-		likes, err := strconv.Atoi(likesStr)
-		if err == nil {
-			if question.Likes < likes {
-				return false
-			}
-		}
-	}
-	return true
-}
-
-// extra options to filter answers, return true if passed all filters
-func answerFilters(answer *model.Answer, isBest, likesStr string, userSet map[int]struct{}) bool {
-
-	if function.CheckNotEmpty(isBest) && answer.IsBest != 1 {
-		return false
-	}
-	// the answer is not posted by any user you look for, return false
-	if len(userSet) != 0 {
-		_, ok := userSet[answer.Uid]
-		if !ok {
-			return false
-		}
-	}
-	if function.CheckNotEmpty(likesStr) {
-		likes, err := strconv.Atoi(likesStr)
-		if err == nil {
-			if answer.Likes < likes {
-				return false
-			}
-		}
-	}
-	return true
-}
-
 func ListByKeyword(c *gin.Context) {
 	/*
 		list questions / answers / both by keyword
@@ -116,7 +78,7 @@ func ListByKeyword(c *gin.Context) {
 		if function.CheckNotEmpty(isResolved) {
 			sql = sql.Where("is_resolved = ?", model.IsResolved)
 		}
-		if questionUids != nil {
+		if len(questionUids) != 0 {
 			sql = sql.Where("uid in (?)", questionUids)
 		}
 		if function.CheckNotEmpty(questionLikes) {
@@ -196,7 +158,7 @@ func ListByKeyword(c *gin.Context) {
 		if function.CheckNotEmpty(isBest) {
 			sql = sql.Where("is_best = ?", model.IsBest)
 		}
-		if answerUids != nil {
+		if len(answerUids) != 0 {
 			sql = sql.Where("uid in (?)", answerUids)
 		}
 		if function.CheckNotEmpty(answerLikes) {
