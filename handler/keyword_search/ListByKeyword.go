@@ -78,7 +78,7 @@ func ListByKeyword(c *gin.Context) {
 		if function.CheckNotEmpty(isResolved) {
 			sql = sql.Where("is_resolved = ?", model.IsResolved)
 		}
-		if questionUids != nil {
+		if len(questionUids) != 0 {
 			sql = sql.Where("uid in (?)", questionUids)
 		}
 		if function.CheckNotEmpty(questionLikes) {
@@ -158,7 +158,7 @@ func ListByKeyword(c *gin.Context) {
 		if function.CheckNotEmpty(isBest) {
 			sql = sql.Where("is_best = ?", model.IsBest)
 		}
-		if answerUids != nil {
+		if len(answerUids) != 0 {
 			sql = sql.Where("uid in (?)", answerUids)
 		}
 		if function.CheckNotEmpty(answerLikes) {
