@@ -1,10 +1,17 @@
-.questionCard{
+// .main{
+//     display: flex;
+//     width: 100%;
+//     flex-direction: column;
+//     justify-content: center;
+// }
+
+.questionPart{
     display: block;
     width: 80%;
-    height: 95px;
-    border: 1px solid blue;
+    
     margin: 1em;
     padding: 1em;
+    border: 1px solid blue;
     align-self: center;
     border-radius: 1rem;
     
@@ -27,7 +34,6 @@
 
     .body{  
         width: inherit;
-        height: 35px;
         overflow: hidden;
         text-overflow: ellipsis;
         display: '-webkit-box';

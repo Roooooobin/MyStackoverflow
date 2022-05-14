@@ -1,40 +1,66 @@
 import { Link } from "react-router-dom";
 import "./QuestionCard.scss";
-import date from "date-and-time";
-import {FcOk} from "react-icons/fc"
+import { FcOk } from "react-icons/fc";
+import React from "react";
 
-function QuestionCard({ data }) {
+class QuestionCard extends React.Component {
     // const datetime = date.parse(data['Time'], 'YYYY-MM-DD hh:mm:ssZZ')
+    constructor(props) {
+        super(props);
+    }
 
-    var toTime = function (dateStr) {
+    state = {
+        quser: null,
+    };
+
+    toTime(dateStr) {
         var date = new Date(dateStr).toJSON();
         return new Date(+new Date(date) + 8 * 3600 * 1000)
             .toISOString()
             .replace(/T/g, " ")
             .replace(/\.[\d]{3}Z/, "");
-    };
+    }
 
-    const datetime = toTime(data["Time"]);
-    const isResolved = data["IsResolved"] === 1;
+    async componentDidMount() {
+        const uid = this.props.data["Uid"];
+        const respUser = await fetch(`http://0.0.0.0:8080/user/get?uid=${uid}`);
+        const quser = await respUser.json();
 
-    return (
-        <div className="questionCard">
-            <div className="top-line">
-                <Link to={`/question/${data["Qid"]}`}>
-                    <label>{data["Title"]}</label>
-                </Link>
-                {isResolved && <FcOk className="isResolved" />}
-            </div>
+        this.setState({ quser });
+    }
 
-            <div className="body">
-                <p>{data["Body"]}</p>
+    render() {
+        const data = this.props.data;
+        const datetime = this.toTime(data["Time"]);
+        const isResolved = data["IsResolved"] === 1;
+        const { quser } = this.state;
+        return (
+            <div className="questionCard">
+                <div className="top-line">
+                    <Link to={`/question/${data["Qid"]}`}>
+                        <label>{data["Title"]}</label>
+                    </Link>
+                    {isResolved && <FcOk className="isResolved" />}
+                </div>
+
+                <div className="body">
+                    <p>{data["Body"]}</p>
+                </div>
+                <div className="btm-line">
+                    <div className="name-time">
+                        {quser && (
+                            <div>
+                                Posted by:{" "}
+                                <Link to={`/profile/${quser.data.Uid}`}>{quser.data.Username}</Link>
+                            </div>
+                        )}
+                        <p className="time">{datetime}</p>
+                    </div>
+                    <p className="like">Likes: {data["Likes"]}</p>
+                </div>
             </div>
-            <div className="btm-line">
-                <p className="time">{datetime}</p>
-                <p className="like">Likes: {data["Likes"]}</p>
-            </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default QuestionCard;

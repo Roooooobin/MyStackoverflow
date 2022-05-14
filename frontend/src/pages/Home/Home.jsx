@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "../../components/Header/Header";
 import Lister from "../../components/Lister/Lister";
-import QuestionCard from "../../components/Question/QuestionCard";
 
 class Home extends React.Component {
     state = {
@@ -16,16 +15,13 @@ class Home extends React.Component {
 
     render() {
         const { results } = this.state;
-        if (results) {
-            console.log(Object.keys(results.data).length);
-        }
 
         return (
             <div>
                 <Header search={true} />
                 {/* <label>This is Home!!!</label> */}
                 <div className="listQuestions">
-                    {results && <Lister totalData={results["data"]} />}
+                    {results && <Lister totalData={results["data"]} question={true}/>}
                 </div>
             </div>
         );
