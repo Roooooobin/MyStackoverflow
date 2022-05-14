@@ -50,13 +50,15 @@ const SignUp = () => {
 
         const response = await fetch(SIGNUP_URL, registUser);
         const data = await response.json();
-
-        const uid = data;
-        const login = uid>0;
+        console.log(data);
+        const uid = data.data;
 
         if (uid > 0) {
-            login = true;
-            setAuth({ uid, username, login });
+            const respUser = await fetch(`http://0.0.0.0:8080/user/get?uid=${uid}`)
+            const userResult = await respUser.json();
+            const userData = userResult.data;
+            
+            setAuth({ userData });
 
             setUsername("");
             setPwd("");

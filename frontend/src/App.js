@@ -9,11 +9,6 @@ import Result from "./pages/SearchResult";
 import Profile from "./pages/Profile";
 
 class App extends React.Component {
-    state = {
-        isLogin: false,
-    };
-
-    handleLogin = (isLogin) => this.setState({isLogin})
 
     render() {
         return (
@@ -23,7 +18,7 @@ class App extends React.Component {
                     <Route
                         path="/login"
                         exact
-                        element={<Login isLogin={this.handleLogin} />}
+                        element={<Login/>}
                     />
                     <Route path="/signup" exact element={<SignUp />} />
                     <Route path="/result" exact element={<Result />} />
