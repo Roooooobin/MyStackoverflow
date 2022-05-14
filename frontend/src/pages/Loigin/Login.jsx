@@ -2,14 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Login.scss";
 import Header from "../../components/Header/Header";
-import { useRef, useState, useEffect, useContext } from "react";
-import AuthContext from "../../context/authProvidor";
+import { useRef, useState, useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
 import md5 from "js-md5";
 
 const LOGIN_URL = "http://0.0.0.0:8080/user/authorize";
 
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useAuth();
     const userRef = useRef();
     const errRef = useRef();
 
@@ -43,18 +43,19 @@ const Login = () => {
         const response = await fetch(LOGIN_URL, authUser);
         const data = await response.json();
 
-        const uid = data;
-        let login;
+        const uid = data.data;
         if (uid > 0) {
-            login = true;
-            setAuth({ uid, username, login });
+            const respUser = await fetch(`http://0.0.0.0:8080/user/get?uid=${uid}`)
+            const userResult = await respUser.json();
+            const userData = userResult.data;
+
+            setAuth({ userData });
 
             setUsername("");
             setPwd("");
             setSuccess(true);
         } else {
             setErrMsg("username and password not match");
-            login = false;
         }
     };
 
