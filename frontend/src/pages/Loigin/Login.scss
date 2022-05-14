@@ -15,7 +15,7 @@ body{
         border-radius: 2rem;
 
         .loginTitle{
-            height: 50px;
+            height: 100px;
             font-size: 30px;
             font-weight: 700;
             text-align: center;
@@ -27,14 +27,46 @@ body{
         }
 
         .loginInput{
-            height: 350px;
+            height: 300px;
             color:aliceblue;
-            // background-color: yellow;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            input{
+                width: 200px;
+                height: 50px;
+                margin: 10px auto 0;
+                border-radius: 0.5rem;
+                font-size: medium;
+                border: 0cm;
+            }
         }
 
         .btns{
             height: 100px;
-            background-color: green;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+
+            .loginbtn{
+                width: 80px;
+                height: 30px;
+                font-size: 12pt;
+                color: green;
+                border-radius: 0.5rem;
+                border: 0cm;
+            }
+
+            .signupbtn{
+                width: 80px;
+                height: 30px;
+                font-size: 12pt;
+                color: red;
+                border-radius: 0.5rem;
+                border: 0cm;
+            }
         }
     }
 }

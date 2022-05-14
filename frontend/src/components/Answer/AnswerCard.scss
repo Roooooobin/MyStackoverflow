@@ -1,0 +1,31 @@
+.AnswerCard{
+    display: block;
+    width: 80%;
+    border: 1px solid orange;
+    margin: 1em;
+    padding: 1em;
+    align-self: center;
+    border-radius: 1rem;
+
+    .top-line{
+        display: flex;
+        height: 30px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .name-time{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: baseline;
+
+            p{padding-left: 10px;}
+
+        }
+
+        .FcCheckmark{
+            font-size: 30px;
+        }
+    }
+}
