@@ -166,6 +166,7 @@ const SignUp = () => {
                             onChange={(e) => setProfile(e.target.value)}
                             value={profile}
                             required
+                            size="50"
                         />
                         <button>Sign Up</button>
                     </form>
