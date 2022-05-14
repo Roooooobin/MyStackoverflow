@@ -28,47 +28,33 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const authUser = {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true,
-                body: JSON.stringify({
-                    username: username,
-                    password: md5(pwd),
-                }),
-            };
+        const md5pwd = md5(pwd)
+        let formdata = new FormData()
+        
+        formdata.append('username', username)
+        formdata.append('password', md5pwd)
 
-            const response = await fetch(LOGIN_URL, authUser);
+        const authUser = {
+            method: "POST",
+            withCredentials: true,
+            body: formdata,
+        };
 
-            console.log(JSON.stringify(response?.data));
+        const response = await fetch(LOGIN_URL, authUser);
+        const data = await response.json();
 
-            const uid = response.data.uid;
-            let login;
-            if (uid > 0) {
-                login = true;
-            } else {
-                login = false;
-            }
-
+        const uid = data;
+        let login;
+        if (uid > 0) {
+            login = true;
             setAuth({ uid, username, login });
 
             setUsername("");
             setPwd("");
             setSuccess(true);
-        } catch (err) {
-            if (!err?.response) {
-                setErrMsg("No Server Response");
-            } else if (err.response?.status === 400) {
-                setErrMsg("Missing username or password");
-            } else if (err.response?.status === 401) {
-                setErrMsg("Unauthorized");
-            } else if (err.response?.status === 404) {
-                setErrMsg("No Auth API");
-            } else {
-                setErrMsg("Login failed");
-            }
-            errRef.current.focus();
+        } else {
+            setErrMsg("username and password not match");
+            login = false;
         }
     };
 
