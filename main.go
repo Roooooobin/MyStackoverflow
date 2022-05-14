@@ -28,6 +28,9 @@ func RegisterRouter() *gin.Engine {
 		groupUser.POST("/edit", func(c *gin.Context) {
 			user.EditUser(c)
 		})
+		groupUser.POST("/authorize", func(c *gin.Context) {
+			user.AuthorizeUser(c)
+		})
 	}
 
 	groupTopic := r.Group("/topic")
