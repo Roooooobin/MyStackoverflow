@@ -11,7 +11,7 @@ function Result() {
 
     return (
         <div>
-            <Header />
+            <Header search={false} />
             <SearchResult q={q} />
         </div>
     );
@@ -20,7 +20,6 @@ function Result() {
 class SearchResult extends React.Component {
     constructor(props) {
         super(props);
-        
     }
 
     state = {
@@ -48,7 +47,7 @@ class SearchResult extends React.Component {
                 <div>
                     {results &&
                         results["data"]["questions"].map((data) => (
-                            <QuestionCard qid={data["Qid"]} />
+                            <QuestionCard data={data} />
                         ))}
                 </div>
 

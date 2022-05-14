@@ -1,0 +1,46 @@
+.questionCard{
+    display: block;
+    width: 80%;
+    height: 95px;
+    border: 1px solid blue;
+    margin: 1em;
+    padding: 1em;
+    align-self: center;
+    border-radius: 1rem;
+    
+
+    .top-line{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        label{
+            height: 50px;
+            font-size: 18pt;
+            margin: 0;
+        }
+    
+        .isResolved{
+            font-size: 18pt;
+        }
+    }
+
+    .body{  
+        width: inherit;
+        height: 35px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: '-webkit-box';
+        -webkit-line-clamp: '2';
+        -webkit-box-orient: 'vertical';
+    }
+
+    .btm-line{
+        height: 30px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: visible;
+    }
+}

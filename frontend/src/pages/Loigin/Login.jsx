@@ -60,7 +60,7 @@ class Login extends React.Component {
         return (
             <div>
                 <div>
-                    <Header isLogin={false} />
+                    <Header isLogin={false} search={false}/>
                 </div>
                 <div className="container">
                     <div className="loginTitle">

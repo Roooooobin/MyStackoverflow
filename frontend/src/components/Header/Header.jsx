@@ -20,7 +20,7 @@ class Header extends React.Component {
                     <FaBeer className="icon" />
                 </Link>
                 <div className="search-bar">
-                    <SearchBar placeholder="Enter Your Question..." />
+                    {this.props.search && (<SearchBar placeholder="Enter Your Question..." />)}
                 </div>
                 {!this.props.isLogin && (
                     <div className="login-btn">

@@ -16,10 +16,9 @@ function SearchBar({ placeholder }) {
           value={searchQuery}
         />
         <div className="searchIcon">
-          <Link to={`/result/${searchQuery}`} onClick={this.forceUpdate()}>
+          <Link to={`/result/${searchQuery}`}>
             <FaSearch className="icon" />
           </Link>
-          
         </div>
       </div>
     </div>
