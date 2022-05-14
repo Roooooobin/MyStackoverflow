@@ -2,10 +2,14 @@ package question
 
 import (
 	"MyStackoverflow/common"
+	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/questionlikesdao"
+	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
@@ -34,19 +38,30 @@ func LikeQuestion(c *gin.Context) {
 		errMsg = "Input qid error: " + err.Error()
 		return
 	}
-	_, err = questionlikesdao.Find("uid = ? and qid = ?", uid, qid)
-	// already added a like
-	if err == nil {
-		errMsg = "Already liked this question."
-		return
-	}
-	questionLike := model.QuestionLike{
-		Uid:  uid,
-		Qid:  qid,
-		Time: time.Now(),
-	}
-	if err = questionlikesdao.Insert(questionLike); err != nil {
-		errMsg = err.Error()
+	// use transaction to support concurrency and data consistency
+	errTx := dao.MyDB.Transaction(func(tx *gorm.DB) error {
+		questionLike := model.QuestionLike{}
+		err = tx.Table(questionlikesdao.TableQuestionLikes).Where("uid = ? and qid = ?", uid, qid).
+			First(&questionLike).Error
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("Already liked this question.")
+		}
+		questionLike = model.QuestionLike{
+			Uid:  uid,
+			Qid:  qid,
+			Time: time.Now(),
+		}
+		if err = tx.Table(questionlikesdao.TableQuestionLikes).Create(questionLike).Error; err != nil {
+			return err
+		}
+		if err = tx.Table(questionsdao.TableQuestions).Where("qid = ?", qid).
+			Update("likes", gorm.Expr("likes + ?", 1)).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	if errTx != nil {
+		errMsg = errTx.Error()
 		return
 	}
 }

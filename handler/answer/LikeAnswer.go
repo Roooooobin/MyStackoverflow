@@ -2,10 +2,14 @@ package answer
 
 import (
 	"MyStackoverflow/common"
+	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answerlikesdao"
+	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
@@ -34,18 +38,30 @@ func LikeAnswer(c *gin.Context) {
 		errMsg = "Input aid error: " + err.Error()
 		return
 	}
-	_, err = answerlikesdao.Find("uid = ? and aid = ?", uid, aid)
-	// already added a like
-	if err == nil {
-		return
-	}
-	answerLike := model.AnswerLike{
-		Uid:  uid,
-		Aid:  aid,
-		Time: time.Now(),
-	}
-	if err = answerlikesdao.Insert(answerLike); err != nil {
-		errMsg = err.Error()
+	// use transaction to support concurrency and data consistency
+	errTx := dao.MyDB.Transaction(func(tx *gorm.DB) error {
+		answerLike := model.AnswerLike{}
+		err = tx.Table(answerlikesdao.TableLikes).Where("uid = ? and aid = ?", uid, aid).
+			First(&answerLike).Error
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("Already liked this answer.")
+		}
+		answerLike = model.AnswerLike{
+			Uid:  uid,
+			Aid:  aid,
+			Time: time.Now(),
+		}
+		if err = tx.Table(answerlikesdao.TableLikes).Create(answerLike).Error; err != nil {
+			return err
+		}
+		if err = tx.Table(answersdao.TableAnswers).Where("aid = ?", aid).
+			Update("likes", gorm.Expr("likes + ?", 1)).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	if errTx != nil {
+		errMsg = errTx.Error()
 		return
 	}
 }

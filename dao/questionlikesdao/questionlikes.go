@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var tableQuestionLikes = "QuestionLikes"
+var TableQuestionLikes = "QuestionLikes"
 
 func Insert(v model.QuestionLike) error {
 
-	if err := dao.MyDB.Table(tableQuestionLikes).Create(&v).Error; err != nil {
+	if err := dao.MyDB.Table(TableQuestionLikes).Create(&v).Error; err != nil {
 		fmt.Println("insertion failed: ", err)
 		return err
 	}
@@ -22,7 +22,7 @@ func Insert(v model.QuestionLike) error {
 func Find(where string, values ...interface{}) (*model.QuestionLike, error) {
 
 	questionLike := &model.QuestionLike{}
-	res := dao.MyDB.Table(tableQuestionLikes).Where(where, values...).First(&questionLike)
+	res := dao.MyDB.Table(TableQuestionLikes).Where(where, values...).First(&questionLike)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("record not found")
 	}
@@ -32,7 +32,7 @@ func Find(where string, values ...interface{}) (*model.QuestionLike, error) {
 func List(where string, values ...interface{}) ([]*model.QuestionLike, error) {
 
 	questionLikes := make([]*model.QuestionLike, 0)
-	res := dao.MyDB.Table(tableQuestionLikes).Where(where, values...).Find(&questionLikes)
+	res := dao.MyDB.Table(TableQuestionLikes).Where(where, values...).Find(&questionLikes)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("record not found")
 	}
@@ -41,7 +41,7 @@ func List(where string, values ...interface{}) ([]*model.QuestionLike, error) {
 
 func Update(updateMap map[string]interface{}, where string, values ...interface{}) error {
 
-	res := dao.MyDB.Table(tableQuestionLikes).Where(where, values...).Updates(updateMap)
+	res := dao.MyDB.Table(TableQuestionLikes).Where(where, values...).Updates(updateMap)
 	if res.Error != nil {
 		return res.Error
 	}
