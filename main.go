@@ -2,6 +2,7 @@ package main
 
 import (
 	"MyStackoverflow/cache"
+	"MyStackoverflow/cronjob"
 	"MyStackoverflow/handler/answer"
 	"MyStackoverflow/handler/keyword_search"
 	"MyStackoverflow/handler/question"
@@ -116,6 +117,8 @@ func main() {
 	r := RegisterRouter()
 	// pre-computed cache
 	cache.Init()
+	// start cronjob
+	cronjob.Init()
 	// listen and serve on 0.0.0.0:8080
 	err := r.Run()
 	if err != nil {
