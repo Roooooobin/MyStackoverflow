@@ -2,9 +2,11 @@ package user
 
 import (
 	"MyStackoverflow/common"
+	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/model"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func AddUser(c *gin.Context) {
@@ -31,8 +33,13 @@ func AddUser(c *gin.Context) {
 		Country:  country,
 		Profile:  profile,
 	}
-	err := usersdao.Insert(user)
+	err := dao.MyDB.Table(usersdao.TableUsers).Create(&user).Error
 	if err != nil {
+		errMsg = err.Error()
 		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"data": user.Uid,
+		})
 	}
 }

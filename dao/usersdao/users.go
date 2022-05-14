@@ -3,8 +3,6 @@ package usersdao
 import (
 	"MyStackoverflow/dao"
 	"MyStackoverflow/model"
-	"crypto/md5"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
@@ -14,9 +12,9 @@ var TableUsers = "Users"
 
 func Insert(v model.User) error {
 
-	// with password md5 encrypted to be safer
-	hash := md5.Sum([]byte(v.Password))
-	v.Password = hex.EncodeToString(hash[:])
+	// with password md5 encrypted to be safer(deprecated, md5 by frontend)
+	//hash := md5.Sum([]byte(v.Password))
+	//v.Password = hex.EncodeToString(hash[:])
 	if err := dao.MyDB.Table(TableUsers).Create(&v).Error; err != nil {
 		fmt.Println("insertion failed: ", err)
 		return err
