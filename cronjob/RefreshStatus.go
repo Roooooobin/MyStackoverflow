@@ -6,7 +6,6 @@ import (
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/model"
-	"fmt"
 	"time"
 )
 
@@ -56,7 +55,6 @@ func getPointsForUser(uid int) int {
 		}
 	}
 	points := answerLikes + 100*bestAnswers + questionLikes
-	fmt.Println(points)
 	return points
 }
 
@@ -75,6 +73,5 @@ func refresh() {
 			"status": newStatus,
 		}
 		_ = usersdao.Update(updateMap, "uid = ?", user.Uid)
-		fmt.Printf("update uid: %d", user.Uid)
 	}
 }
