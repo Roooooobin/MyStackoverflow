@@ -9,11 +9,13 @@ import { getTopic } from "../../api/getTopic";
 
 const ADDANS_URL = "http://0.0.0.0:8080/answer/add";
 const TOPIC_DEFAULT = "Select Topics";
+const BODY_DEFAULT = "Input your details here...";
 
 const AddAnswer = ({ qid }) => {
     const { userData } = CheckAuth();
 
-    const [ansBody, setAnsBody] = useState("Input your answer here...");
+
+    const [ansBody, setAnsBody] = useState(BODY_DEFAULT);
     const [success, setSuccess] = useState(false);
     const [selectTopic, setAnsTopic] = useState(TOPIC_DEFAULT);
     const [list, setList] = useState([]);
@@ -77,11 +79,12 @@ const AddAnswer = ({ qid }) => {
                                     type="text"
                                     id="ansBody"
                                     value={ansBody}
+                                    placeholder={BODY_DEFAULT}
                                     onChange={(e) => {
                                         setAnsBody(e.target.value);
                                     }}
                                     required
-                                />
+                                ></textarea>
                                 <Select
                                     value={selectTopic}
                                     onChange={setAnsTopic}

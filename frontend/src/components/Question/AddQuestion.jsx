@@ -87,12 +87,12 @@ const AddQuestion = () => {
                                     type="text"
                                     id="quesTitle"
                                     value={quesTitle}
-                                    defaultValue={TITLE_DEFAULT}
+                                    placeholder={TITLE_DEFAULT}
                                     onChange={(e) => {
                                         setQuesTitle(e.target.value);
                                     }}
                                     required
-                                />
+                                ></textarea>
                                 <textarea
                                     className="body"
                                     type="text"
@@ -101,9 +101,9 @@ const AddQuestion = () => {
                                     onChange={(e) => {
                                         setQuesBody(e.target.value);
                                     }}
-                                    defaultValue={BODY_DEFAULT}
+                                    placeholder={BODY_DEFAULT}
                                     required
-                                />
+                                ></textarea>
                                 <Select
                                     value={selectTopic}
                                     onChange={setQuesTopic}
