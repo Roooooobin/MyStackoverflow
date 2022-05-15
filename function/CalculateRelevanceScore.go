@@ -51,7 +51,9 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 	if err != nil {
 		fmt.Println(err)
 	}
-	res = scanAndSum(rows, res, maxScore, weightMap["question_title"])
+	if maxScore != 0 {
+		res = scanAndSum(rows, res, maxScore, weightMap["question_title"])
+	}
 	defer func() {
 		_ = rows.Close()
 	}()
@@ -64,7 +66,9 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 	if err != nil {
 		fmt.Println(err)
 	}
-	res = scanAndSum(rows, res, maxScore, weightMap["question_body"])
+	if maxScore != 0 {
+		res = scanAndSum(rows, res, maxScore, weightMap["question_body"])
+	}
 	// relevance score for body of the answer
 	var maxAnswerScore float64
 	rows, err = db.Raw("select sum(match(body) against(?)) from Answers group by qid", keyword).Rows()
@@ -86,7 +90,9 @@ func CalculateRelevanceScoreForQuestion(keyword string) map[int]float64 {
 	if err != nil {
 		fmt.Println(err)
 	}
-	res = scanAndSum(rows, res, maxAnswerScore, weightMap["answer_body"])
+	if maxAnswerScore != 0 {
+		res = scanAndSum(rows, res, maxAnswerScore, weightMap["answer_body"])
+	}
 	// relevance score for topic of the question
 	rows, err = db.Raw("select tid, qid, count(*) from Topics join QuestionTopics using (tid) where topic_name = ? group by tid, qid", keyword).Rows()
 	if err != nil {
