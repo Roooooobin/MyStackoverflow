@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import "./AnswerCard.scss";
 import { FcCheckmark } from "react-icons/fc";
 import AnswerLike from "./AnswerLike";
+import getCurrUid from "../../api/getCurrUid";
+import SelectBest from "./SelectBest";
 
 class AnswerCard extends React.Component {
     constructor(props) {
@@ -11,6 +13,7 @@ class AnswerCard extends React.Component {
 
     state = {
         auser: null,
+        question: null,
     };
 
     toTime(dateStr) {
@@ -26,12 +29,17 @@ class AnswerCard extends React.Component {
         const respUser = await fetch(`http://0.0.0.0:8080/user/get?uid=${uid}`);
         const auser = await respUser.json();
 
-        this.setState({ auser });
+        const qid = this.props.data["Qid"];
+        const respQuestion = await fetch(`http://0.0.0.0:8080/question/get?qid=${qid}`)
+        const question = await respQuestion.json();
+
+        this.setState({ auser, question });
     }
 
     render() {
+        const curId = getCurrUid();
         const data = this.props.data;
-        const { auser } = this.state;
+        const { auser, question } = this.state;
         const isBest = data.IsBest === 1;
         return (
             <div className="AnswerCard">
@@ -65,6 +73,16 @@ class AnswerCard extends React.Component {
                         aid={data.Aid}
                         uid={this.props.currUid}
                     />
+                    {auser && (
+                        <div>
+                            {curId === question.data.Uid.toString() ?
+                                <SelectBest
+                                    likes={data.Likes}
+                                    aid={data.Aid}
+                                    uid={this.props.currUid}
+                                />: ''}
+                        </div>
+                    )}
                 </div>
             </div>
         );
