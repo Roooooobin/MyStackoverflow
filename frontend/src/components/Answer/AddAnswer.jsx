@@ -6,13 +6,14 @@ import "./AddAnswer.scss";
 import Select from "react-select";
 import { useEffect } from "react";
 import { getTopic } from "../../api/getTopic";
+import getCurrUid from "../../api/getCurrUid";
 
 const ADDANS_URL = "http://0.0.0.0:8080/answer/add";
 const TOPIC_DEFAULT = "Select Topics";
 const BODY_DEFAULT = "Input your answer here...";
 
 const AddAnswer = ({ qid }) => {
-    const { userData } = CheckAuth();
+    const uid = getCurrUid()
 
 
     const [ansBody, setAnsBody] = useState("");
@@ -33,7 +34,6 @@ const AddAnswer = ({ qid }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const uid = userData.Uid;
         const tqid = qid["0"];
 
         let formData = new FormData();
@@ -71,7 +71,7 @@ const AddAnswer = ({ qid }) => {
                 </section>
             ) : (
                 <section>
-                    {userData ? (
+                    {uid > 0 ? (
                         <section className="AddAnswer">
                             <form onSubmit={handleSubmit}>
                                 <textarea

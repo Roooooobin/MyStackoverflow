@@ -96,9 +96,7 @@ class QuestionHelper extends React.Component {
                             )}
                             <p className="time">{datetime}</p>
                             {data.Topics && <p>Topics: {data["Topics"]}</p>}
-                            {data["NumOfAnswer"] && (
-                                <p>Number of Ansers: {data["NumOfAnswer"]}</p>
-                            )}
+                            <p>Number of Answers: {data["NumOfAnswer"]}</p>
                         </div>
                         <div className="like">
                             <QuestionLike likes={data.Likes} qid={qid} uid={this.props.currUid}/>

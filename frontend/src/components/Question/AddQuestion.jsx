@@ -17,7 +17,6 @@ const TITLE_DEFAULT = "Input your Question Title here...";
 const TOPIC_DEFAULT = "Select Topics";
 
 const AddQuestion = () => {
-    // const { userData } = CheckAuth();
     const uid = getCurrUid()
 
     const [quesBody, setQuesBody] = useState("");
@@ -116,7 +115,7 @@ const AddQuestion = () => {
                         <section className="AddQuestion">
                             <h3>
                                 Please <Link to={"/login"}>Log in</Link> to add
-                                answer
+                                question
                             </h3>
                         </section>
                     )}
