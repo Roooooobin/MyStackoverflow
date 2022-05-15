@@ -68,11 +68,11 @@ class AnswerCard extends React.Component {
                         <p>Rating: {data.Rating}</p>
                         <p>Topics: {data.Topics}</p>
                     </div>
-                    <AnswerLike
+                    {curId > 0 && <AnswerLike
                         likes={data.Likes}
                         aid={data.Aid}
                         uid={this.props.currUid}
-                    />
+                    />}
                     {auser && (
                         <div>
                             {curId === question.data.Uid.toString() ?

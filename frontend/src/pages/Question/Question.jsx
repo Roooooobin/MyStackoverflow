@@ -102,7 +102,7 @@ class QuestionHelper extends React.Component {
                             <p>Number of Answers: {data["NumOfAnswer"]}</p>
                         </div>
                         <div className="like">
-                            <QuestionLike likes={data.Likes} qid={qid} uid={this.props.currUid}/>
+                            {curId > 0 ? <QuestionLike likes={data.Likes} qid={qid} uid={this.props.currUid}/>: ""}
                         </div>
                     </div>
                     <br />
