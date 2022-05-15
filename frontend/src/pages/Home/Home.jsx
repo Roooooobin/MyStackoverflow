@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../components/Header/Header";
 import Lister from "../../components/Lister/Lister";
+import AddQuestion from "../../components/Question/AddQuestion";
 
 class Home extends React.Component {
     state = {
@@ -20,6 +21,8 @@ class Home extends React.Component {
             <div>
                 <Header search={true} />
                 {/* <label>This is Home!!!</label> */}
+                <br />
+                <AddQuestion />
                 <div className="listQuestions">
                     {results && <Lister totalData={results["data"]} question={true}/>}
                 </div>

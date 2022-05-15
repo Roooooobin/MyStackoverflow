@@ -5,6 +5,7 @@ import { FcOk } from "react-icons/fc";
 import "./Question.scss";
 import { Link } from "react-router-dom";
 import Lister from "../../components/Lister/Lister";
+import AddAnswer from "../../components/Answer/AddAnswer";
 
 function Question() {
     const params = useParams();
@@ -95,11 +96,12 @@ class QuestionHelper extends React.Component {
             if (Object.keys(data).length !== 0) {
                 apart = (
                     <div className="answersPart">
+                        <div className="addAnswer"><AddAnswer qid={this.props.qid}/></div>
                         <Lister totalData={answers.data} answer={true} />
                     </div>
                 );
             } else {
-                apart = <div>No answer</div>;
+                apart = <div className="addAnswer"><AddAnswer qid={this.props.qid}/></div>;
             }
         }
 

@@ -1,0 +1,16 @@
+.AddAnswer {
+    width: 100%;
+    text-align: center;
+    border: 3px solid #ccc;
+
+    .body {
+        width: 95%;
+        padding: 8px 10px;
+        margin: 10px 8px;
+        box-sizing: border-box;
+        justify-content: flex-start;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        min-height: 200px;
+    }
+}
