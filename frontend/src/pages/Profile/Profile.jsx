@@ -109,6 +109,9 @@ class ProfileHelper extends React.Component {
                             <div className="profile">
                                 <p>profile: {udata["Profile"]}</p>
                             </div>
+                            <div className="profile">
+                                <p>status: {udata["Status"]}</p>
+                            </div>
                             <div className="edit">
                                 {thisUser && (
                                     <button onClick={this.handleEditclick}>
