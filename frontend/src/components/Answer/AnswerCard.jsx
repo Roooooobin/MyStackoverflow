@@ -15,7 +15,7 @@ class AnswerCard extends React.Component {
 
     toTime(dateStr) {
         var date = new Date(dateStr).toJSON();
-        return new Date(+new Date(date) + 8 * 3600 * 1000)
+        return new Date(+new Date(date) - 4 * 3600 * 1000)
             .toISOString()
             .replace(/T/g, " ")
             .replace(/\.[\d]{3}Z/, "");
