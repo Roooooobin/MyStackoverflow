@@ -61,6 +61,9 @@ func RegisterRouter() *gin.Engine {
 		groupQuestion.POST("/edit", func(c *gin.Context) {
 			question.EditQuestion(c)
 		})
+		groupQuestion.POST("/resolve", func(c *gin.Context) {
+			question.MarkResolved(c)
+		})
 	}
 
 	groupAnswer := r.Group("/answer")

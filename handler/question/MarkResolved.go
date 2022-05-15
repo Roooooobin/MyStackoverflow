@@ -1,15 +1,14 @@
-package answer
+package question
 
 import (
 	"MyStackoverflow/common"
-	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/function"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-func SelectBest(c *gin.Context) {
+func MarkResolved(c *gin.Context) {
 
 	errMsg := ""
 	defer func() {
@@ -27,18 +26,13 @@ func SelectBest(c *gin.Context) {
 		errMsg = "Input uid error: " + err.Error()
 		return
 	}
-	aidStr := c.PostForm("aid")
-	aid, err := strconv.Atoi(aidStr)
+	qidStr := c.PostForm("qid")
+	qid, err := strconv.Atoi(qidStr)
 	if err != nil {
-		errMsg = "Input aid error: " + err.Error()
+		errMsg = "Input qid error: " + err.Error()
 		return
 	}
-	answer, err := answersdao.Find("aid = ?", aid)
-	if err != nil {
-		errMsg = err.Error()
-		return
-	}
-	question, err := questionsdao.Find("qid = ?", answer.Qid)
+	question, err := questionsdao.Find("qid = ?", qid)
 	if err != nil {
 		errMsg = err.Error()
 		return
@@ -47,15 +41,15 @@ func SelectBest(c *gin.Context) {
 		errMsg = "Can not select a best answer if you are not the user who post the question!"
 		return
 	}
-	isBest := 1
+	isResolved := 1
 	// already is best, cancel it
-	if answer.IsBest == 1 {
-		isBest = 0
+	if question.IsResolved == 1 {
+		isResolved = 0
 	}
 	updateMap := map[string]interface{}{
-		"is_best": isBest,
+		"is_resolved": isResolved,
 	}
-	err = answersdao.Update(updateMap, "aid = ?", aid)
+	err = questionsdao.Update(updateMap, "qid = ?", qid)
 	if err != nil {
 		errMsg = err.Error()
 		return
