@@ -10,6 +10,7 @@ import QuestionLike from "../../components/Question/QuestionLike";
 import CheckAuth from "../../api/CheckAuth";
 import ResolveQuestion from "../../components/Question/ResolveQuestion";
 import getCurrUid from "../../api/getCurrUid";
+import AnswerCard from "../../components/Answer/AnswerCard";
 
 function Question() {
     const {curUser} = CheckAuth()
@@ -115,6 +116,7 @@ class QuestionHelper extends React.Component {
             );
         }
         if (answers) {
+
             const data = answers.data;
             if (Object.keys(data).length !== 0) {
                 apart = (
@@ -122,7 +124,13 @@ class QuestionHelper extends React.Component {
                         <div className="addAnswer">
                             <AddAnswer qid={this.props.qid} />
                         </div>
-                        <Lister totalData={answers.data} answer={true} currUid={this.props.currUid}/>
+                        <ul className="index">
+                            {data.map(function (data) {
+                                return (
+                                    <AnswerCard data={data} currUid={curId} />
+                                );
+                            })}
+                        </ul>
                     </div>
                 );
             } else {
