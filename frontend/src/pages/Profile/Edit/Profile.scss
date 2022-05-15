@@ -1,0 +1,53 @@
+// .main{
+//     display: flex;
+//     width: 100%;
+//     flex-direction: column;
+//     justify-content: center;
+// }
+
+.profilePart{
+    display: block;
+    width: 80%;
+
+    margin: 1em;
+    padding: 1em;
+    border: 1px solid blue;
+    align-self: center;
+    border-radius: 1rem;
+
+
+    .top-line{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        label{
+            height: 50px;
+            font-size: 18pt;
+            margin: 0;
+        }
+
+        .isResolved{
+            font-size: 18pt;
+        }
+    }
+
+    .btm-line{
+        height: 30px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: visible;
+
+        .name-time{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: baseline;
+
+            p{padding-left: 10px;}
+
+        }
+    }
+}
