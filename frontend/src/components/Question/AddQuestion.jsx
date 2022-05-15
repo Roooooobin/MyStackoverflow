@@ -20,8 +20,8 @@ const AddQuestion = () => {
     // const { userData } = CheckAuth();
     const uid = getCurrUid()
 
-    const [quesBody, setQuesBody] = useState(BODY_DEFAULT);
-    const [quesTitle, setQuesTitle] = useState(TITLE_DEFAULT);
+    const [quesBody, setQuesBody] = useState("");
+    const [quesTitle, setQuesTitle] = useState("");
     const [success, setSuccess] = useState(false);
     const [selectTopic, setQuesTopic] = useState(TOPIC_DEFAULT);
     const [list, setList] = useState([]);
@@ -86,26 +86,25 @@ const AddQuestion = () => {
                             <form onSubmit={handleSubmit}>
                                 <textarea
                                     className="title"
-                                    type="text"
                                     id="quesTitle"
+                                    placeholder={TITLE_DEFAULT}
                                     value={quesTitle}
-                                    defaultValue={TITLE_DEFAULT}
                                     onChange={(e) => {
                                         setQuesTitle(e.target.value);
                                     }}
                                     required
-                                />
+                                ></textarea>
                                 <textarea
                                     className="body"
                                     type="text"
                                     id="quesBody"
+                                    placeholder={BODY_DEFAULT}
                                     value={quesBody}
                                     onChange={(e) => {
                                         setQuesBody(e.target.value);
                                     }}
-                                    defaultValue={BODY_DEFAULT}
                                     required
-                                />
+                                ></textarea>
                                 <Select
                                     value={selectTopic}
                                     onChange={setQuesTopic}
