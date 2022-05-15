@@ -23,7 +23,14 @@ func ListTopic(c *gin.Context) {
 		errMsg = err.Error()
 		return
 	}
+	topicsReturn := make([]map[string]interface{}, 0)
+	for _, topic := range topics {
+		topicsReturn = append(topicsReturn, map[string]interface{}{
+			"value": topic.Tid,
+			"label": topic.TopicName,
+		})
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": topics,
+		"data": topicsReturn,
 	})
 }
