@@ -18,7 +18,7 @@ const Header = ({ search }) => {
                 <FaBeer className="icon" />
             </Link>
             <div className="search-bar">
-                {search && <SearchBar placeholder="Enter Your Question..." />}
+                {search && <SearchBar placeholder="Enter Your Keyword..." />}
             </div>
             {!userData && (
                 <div className="login-btn">
