@@ -4,7 +4,7 @@ import Header from "../../components/Header/Header";
 import { FcOk } from "react-icons/fc";
 import "./Profile.scss";
 import { Link } from "react-router-dom";
-import CheckAuth from "../../components/CheckAuth";
+import CheckAuth from "../../api/CheckAuth";
 
 
 function Profile() {

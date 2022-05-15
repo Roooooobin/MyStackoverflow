@@ -1,7 +1,7 @@
 // Import React dependencies.
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import CheckAuth from "../CheckAuth";
+import CheckAuth from "../../api/CheckAuth";
 import "./AddAnswer.scss";
 
 const ADDANS_URL = "http://0.0.0.0:8080/answer/add";

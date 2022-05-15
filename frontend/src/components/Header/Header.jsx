@@ -6,7 +6,7 @@ import "./SearchBar.jsx";
 import { FaBeer, FaUser } from "react-icons/fa";
 import SearchBar from "./SearchBar.jsx";
 import useAuth from "../../hooks/useAuth";
-import CheckAuth from "../CheckAuth";
+import CheckAuth from "../../api/CheckAuth";
 
 const Header = ({ search }) => {
     const { userData } = CheckAuth();

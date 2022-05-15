@@ -53,6 +53,7 @@ const Login = () => {
 
             setUsername("");
             setPwd("");
+            localStorage.setItem("uid", uid)
             setSuccess(true);
         } else {
             setErrMsg("username and password not match");

@@ -1,4 +1,4 @@
 {
-    "login": false,
-    "currUid": -1
+    "login":true,
+    "currUid":-1
 }
