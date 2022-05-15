@@ -47,8 +47,13 @@ func SelectBest(c *gin.Context) {
 		errMsg = "Can not select a best answer if you are not the user who post the question!"
 		return
 	}
+	is_best := 1
+	// already is best, cancel it
+	if answer.IsBest == 1 {
+		is_best = 0
+	}
 	updateMap := map[string]interface{}{
-		"is_best": 1,
+		"is_best": is_best,
 	}
 	err = answersdao.Update(updateMap, "aid = ?", aid)
 	if err != nil {
