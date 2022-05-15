@@ -1,6 +1,7 @@
 package keyword_search
 
 import (
+	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
@@ -153,7 +154,59 @@ func ListByKeyword(c *gin.Context) {
 				return questions[i].Likes < questions[j].Likes
 			})
 		}
-		data["questions"] = questions
+		// attach the number of answer
+		qids := make([]int, 0)
+		for _, question := range questions {
+			qids = append(qids, question.Qid)
+		}
+		answers, err := answersdao.List("qid in (?)", qids)
+		if err != nil {
+			errMsg = err.Error()
+			return
+		}
+		questionToAnswerNumMap := make(map[int]int)
+		for _, answer := range answers {
+			_, ok := questionToAnswerNumMap[answer.Qid]
+			if !ok {
+				questionToAnswerNumMap[answer.Qid] = 1
+			} else {
+				questionToAnswerNumMap[answer.Qid]++
+			}
+		}
+		// attach topics
+		questionToTopicsMap := make(map[int]string)
+		questionTopics, err := questiontopicsdao.List("qid in (?)", qids)
+		if err != nil {
+			errMsg = err.Error()
+			return
+		}
+		for _, questionTopic := range questionTopics {
+			_, ok := questionToTopicsMap[questionTopic.Qid]
+			if !ok {
+				questionToTopicsMap[questionTopic.Qid] = cache.TopicID2Name[questionTopic.Tid] + ","
+			} else {
+				questionToTopicsMap[questionTopic.Qid] += cache.TopicID2Name[questionTopic.Tid] + ","
+			}
+		}
+		questionsWithDetails := make([]*model.QuestionWithDetails, 0)
+		for _, question := range questions {
+			numOfAnswer, ok := questionToAnswerNumMap[question.Qid]
+			if !ok {
+				numOfAnswer = 0
+			}
+			questionsWithDetails = append(questionsWithDetails, &model.QuestionWithDetails{
+				Qid:         question.Qid,
+				Uid:         question.Uid,
+				Title:       question.Title,
+				Body:        question.Body,
+				Time:        question.Time,
+				IsResolved:  question.IsResolved,
+				Likes:       question.Likes,
+				NumOfAnswer: numOfAnswer,
+				Topics:      strings.TrimRight(questionToTopicsMap[question.Qid], ","),
+			})
+		}
+		data["questions"] = questionsWithDetails
 	}
 	_, ok = c.GetQuery("onlyQuestions")
 	if !ok {
