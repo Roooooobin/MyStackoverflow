@@ -9,13 +9,13 @@ import { getTopic } from "../../api/getTopic";
 
 const ADDANS_URL = "http://0.0.0.0:8080/answer/add";
 const TOPIC_DEFAULT = "Select Topics";
-const BODY_DEFAULT = "Input your details here...";
+const BODY_DEFAULT = "Input your answer here...";
 
 const AddAnswer = ({ qid }) => {
     const { userData } = CheckAuth();
 
 
-    const [ansBody, setAnsBody] = useState(BODY_DEFAULT);
+    const [ansBody, setAnsBody] = useState("");
     const [success, setSuccess] = useState(false);
     const [selectTopic, setAnsTopic] = useState(TOPIC_DEFAULT);
     const [list, setList] = useState([]);

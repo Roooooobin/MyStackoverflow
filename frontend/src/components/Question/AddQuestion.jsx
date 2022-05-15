@@ -18,8 +18,8 @@ const TOPIC_DEFAULT = "Select Topics";
 const AddQuestion = () => {
     const { userData } = CheckAuth();
 
-    const [quesBody, setQuesBody] = useState(BODY_DEFAULT);
-    const [quesTitle, setQuesTitle] = useState(TITLE_DEFAULT);
+    const [quesBody, setQuesBody] = useState("");
+    const [quesTitle, setQuesTitle] = useState("");
     const [success, setSuccess] = useState(false);
     const [selectTopic, setQuesTopic] = useState(TOPIC_DEFAULT);
     const [list, setList] = useState([]);
@@ -84,10 +84,9 @@ const AddQuestion = () => {
                             <form onSubmit={handleSubmit}>
                                 <textarea
                                     className="title"
-                                    type="text"
                                     id="quesTitle"
-                                    value={quesTitle}
                                     placeholder={TITLE_DEFAULT}
+                                    value={quesTitle}
                                     onChange={(e) => {
                                         setQuesTitle(e.target.value);
                                     }}
@@ -97,11 +96,11 @@ const AddQuestion = () => {
                                     className="body"
                                     type="text"
                                     id="quesBody"
+                                    placeholder={BODY_DEFAULT}
                                     value={quesBody}
                                     onChange={(e) => {
                                         setQuesBody(e.target.value);
                                     }}
-                                    placeholder={BODY_DEFAULT}
                                     required
                                 ></textarea>
                                 <Select
