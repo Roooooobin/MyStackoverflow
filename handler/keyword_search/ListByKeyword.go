@@ -52,7 +52,9 @@ func ListByKeyword(c *gin.Context) {
 	keyword := c.Query("keyword")
 	// failed to resolve the problem(always a ",function%20()%20{%20[native%20code]%20}" attached at last) on frontend
 	keywords := strings.Split(keyword, ",")
-	keyword = strings.Join(keywords[:len(keywords)-1], ",")
+	if keywords[len(keywords)-1] == "function%20()%20{%20[native%20code]%20}" {
+		keyword = strings.Join(keywords[:len(keywords)-1], ",")
+	}
 	if !function.CheckNotEmpty(keyword) {
 		errMsg = "Input keyword can not be empty, please check and retry."
 		return
