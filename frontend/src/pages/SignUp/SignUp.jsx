@@ -50,7 +50,6 @@ const SignUp = () => {
 
         const response = await fetch(SIGNUP_URL, registUser);
         const data = await response.json();
-        console.log(data);
         const uid = data.data;
 
         if (uid > 0) {
