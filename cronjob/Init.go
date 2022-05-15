@@ -11,7 +11,5 @@ func Init() {
 	if err != nil {
 		return
 	}
-
 	c.Start()
-	select {}
 }

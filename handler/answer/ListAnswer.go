@@ -44,6 +44,8 @@ func ListAnswer(c *gin.Context) {
 	sortByTime, ok := c.GetQuery("sortByTime")
 	if ok {
 		sql.Order("time " + sortByTime)
+	} else {
+		sql.Order("time desc")
 	}
 	answers := make([]*model.Answer, 0)
 	err := sql.Find(&answers).Error
