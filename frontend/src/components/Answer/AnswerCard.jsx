@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./AnswerCard.scss";
 import { FcCheckmark } from "react-icons/fc";
+import AnswerLike from "./AnswerLike";
 
 class AnswerCard extends React.Component {
     constructor(props) {
@@ -46,16 +47,25 @@ class AnswerCard extends React.Component {
                         )}
                         <p className="time">{this.toTime(data.Time)}</p>
                     </div>
-                    
-                    {isBest &&<FcCheckmark className="FcCheckmark"/>}
+
+                    {isBest && <FcCheckmark className="FcCheckmark" />}
                 </div>
                 <div className="body">
                     <p>{data.Body}</p>
                 </div>
 
-                <p>Likes: {data.Likes}</p>
-                <p>Rating: {data.Rating}</p>
-                <p>Topics: {data.Topics}</p>
+                <div className="btm-line">
+                    <div className="btm-left">
+                        <p>Likes: {data.Likes}</p>
+                        <p>Rating: {data.Rating}</p>
+                        <p>Topics: {data.Topics}</p>
+                    </div>
+                    <AnswerLike
+                        likes={data.Likes}
+                        aid={data.Aid}
+                        uid={this.props.currUid}
+                    />
+                </div>
             </div>
         );
     }

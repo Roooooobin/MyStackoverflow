@@ -38,16 +38,15 @@ class SearchResult extends React.Component {
         );
         const results = await response.json();
 
-
-        const rspTopic = await fetch(`http://0.0.0.0:8080/topic/list`);
-        const resTopic = await rspTopic.json();
-        const topics = resTopic.data;
-        console.log("search reasult topic ", topics)
-        this.setState({ topics, results });
+        // const rspTopic = await fetch(`http://0.0.0.0:8080/topic/list`);
+        // const resTopic = await rspTopic.json();
+        // const topics = resTopic.data;
+        // console.log("search reasult topic ", topics)
+        this.setState({ results });
     }
 
     render() {
-        const { topics, results } = this.state;
+        const { results } = this.state;
         let lister;
         if (results) {
             if (Object.keys(results.data.questions).length !== 0) {
@@ -57,6 +56,7 @@ class SearchResult extends React.Component {
                         <Lister
                             totalData={results.data.questions}
                             question={true}
+                            currUid={-1}
                         />
                     </div>
                 );

@@ -34,6 +34,7 @@ class QuestionCard extends React.Component {
         const datetime = this.toTime(data["Time"]);
         const isResolved = data["IsResolved"] === 1;
         const { quser } = this.state;
+
         return (
             <div className="questionCard">
                 <div className="top-line">
@@ -51,12 +52,19 @@ class QuestionCard extends React.Component {
                         {quser && (
                             <div>
                                 Posted by:{" "}
-                                <Link to={`/profile/${quser.data.Uid}`}>{quser.data.Username}</Link>
+                                <Link to={`/profile/${quser.data.Uid}`}>
+                                    {quser.data.Username}
+                                </Link>
                             </div>
                         )}
                         <p className="time">{datetime}</p>
                     </div>
-                    <p className="like">Likes: {data["Likes"]}</p>
+                    {data.Topics && <p>Topics: {data["Topics"]}</p>}
+                    <p>Number of Ansers: {data["NumOfAnswer"]}</p>
+                    <div>
+                        <p className="like">Likes: {data["Likes"]}</p>
+                    </div>
+                    
                 </div>
             </div>
         );
