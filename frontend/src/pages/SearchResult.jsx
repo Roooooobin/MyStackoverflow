@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import Header from "../components/Header/Header";
 import Lister from "../components/Lister/Lister";
+import AddQuestion from "../components/Question/AddQuestion";
 
 function Result() {
     const params = useParams();
@@ -44,28 +45,40 @@ class SearchResult extends React.Component {
             if (Object.keys(results.data.questions).length !== 0) {
                 lister = (
                     <div>
-                        <h2>The answer for "{this.state.q}" is:</h2>{" "}
-                        <Lister totalData={results.data.questions} question={true}/>
+                        <h2>The Question for "{this.state.q}" is:</h2>{" "}
+                        <Lister
+                            totalData={results.data.questions}
+                            question={true}
+                        />
                     </div>
                 );
             } else {
                 lister = (
-                    <h2>
-                        Sorry, We don't find any question about "{this.state.q}
-                        "!
-                    </h2>
+                    <>
+                        <h2>
+                            Sorry, We don't find any question about "
+                            {this.state.q}
+                            "!
+                        </h2>
+                        <AddQuestion />
+                    </>
                 );
             }
         } else {
             lister = (
-                <h2>
-                    Sorry, We don't find any question about "{this.state.q}"!
-                </h2>
+                <>
+                    <h2>
+                        Sorry, We don't find any question about "{this.state.q}
+                        "!
+                    </h2>
+                    <AddQuestion />
+                </>
             );
         }
         return (
             <div>
                 <Header search={false} />
+
                 <div>{lister}</div>
             </div>
         );
