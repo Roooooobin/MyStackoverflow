@@ -45,7 +45,7 @@ class Header extends React.Component {
                 </Link>
                 <div className="search-bar">
                     {this.props.search && (
-                        <SearchBar placeholder="Enter Your Question..." />
+                        <SearchBar placeholder="Enter Your Keyword here..." />
                     )}
                 </div>
                 {userData ? (

@@ -39,7 +39,6 @@ const AddQuestion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (quesBody !== BODY_DEFAULT && quesTitle !== TITLE_DEFAULT) {
-            const uid = uid;
 
             let formData = new FormData();
             formData.append("uid", uid);
@@ -49,7 +48,6 @@ const AddQuestion = () => {
                 formData.append("tid", selectTopic.value)
             }
 
-            
 
             const addAns = {
                 method: "POST",
