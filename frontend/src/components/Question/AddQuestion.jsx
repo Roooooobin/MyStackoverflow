@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import CheckAuth from "../../api/CheckAuth";
 import Topic from "../Topic/Topic";
 import { Dropdown } from "rsuite";
-// import 'rsuite/dist/rsuite.min.css'; 
+import Select from "react-select";
+// import 'rsuite/dist/rsuite.min.css';
+import { useEffect } from "react";
+import { getTopic } from "../../api/getTopic";
 import "./AddQuestion.scss";
-
 
 const ADDQUES_URL = "http://0.0.0.0:8080/question/add";
 const BODY_DEFAULT = "Input your details here...";
@@ -19,7 +21,18 @@ const AddQuestion = () => {
     const [quesBody, setQuesBody] = useState(BODY_DEFAULT);
     const [quesTitle, setQuesTitle] = useState(TITLE_DEFAULT);
     const [success, setSuccess] = useState(false);
-    const [quesTopic, setQuesTopic] = useState(TOPIC_DEFAULT)
+    const [selectTopic, setQuesTopic] = useState(TOPIC_DEFAULT);
+    const [list, setList] = useState([]);
+
+    useEffect(() => {
+        let mounted = true;
+        getTopic().then((items) => {
+            if (mounted) {
+                setList(items);
+            }
+        });
+        return () => (mounted = false);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,6 +43,11 @@ const AddQuestion = () => {
             formData.append("uid", uid);
             formData.append("body", quesBody);
             formData.append("title", quesTitle);
+            if(selectTopic.value>0){
+                formData.append("tid", selectTopic.value)
+            }
+
+            
 
             const addAns = {
                 method: "POST",
@@ -42,8 +60,8 @@ const AddQuestion = () => {
 
             setQuesTitle("");
             setQuesBody("");
+            setQuesTopic("");
             setSuccess(true);
-            console.log(success);
         } else {
             alert("can not post default value");
         }
@@ -86,31 +104,14 @@ const AddQuestion = () => {
                                     defaultValue={BODY_DEFAULT}
                                     required
                                 />
-                                <label htmlFor="topic">Topics: </label>
-                                <Topic />
-                                {/* <Dropdown title={quesTopic} onChange={(e) => {
-                                        setQuesTopic(e.target.value);
-                                    }}>
-                                    <Dropdown.Item value="new file" onClick={(e)=>{
-                                        setQuesTopic(e.target.value)
-                                    }}>
-                                        New File
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        New File with Current Profile
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        Download As...
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>Export PDF</Dropdown.Item>
-                                    <Dropdown.Item>Export HTML</Dropdown.Item>
-                                    <Dropdown.Item>Settings</Dropdown.Item>
-                                    <Dropdown.Item>About</Dropdown.Item>
-                                </Dropdown> */}
+                                <Select
+                                    value={selectTopic}
+                                    onChange={setQuesTopic}
+                                    options={list}
+                                />
                                 <br />
                                 <button>Post Question</button>
                             </form>
-                            
                         </section>
                     ) : (
                         <section className="AddQuestion">
@@ -118,7 +119,6 @@ const AddQuestion = () => {
                                 Please <Link to={"/login"}>Log in</Link> to add
                                 answer
                             </h3>
-                            <Topic />
                         </section>
                     )}
                 </section>

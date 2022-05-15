@@ -3,14 +3,30 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CheckAuth from "../../api/CheckAuth";
 import "./AddAnswer.scss";
+import Select from "react-select";
+import { useEffect } from "react";
+import { getTopic } from "../../api/getTopic";
 
 const ADDANS_URL = "http://0.0.0.0:8080/answer/add";
+const TOPIC_DEFAULT = "Select Topics";
 
 const AddAnswer = ({ qid }) => {
     const { userData } = CheckAuth();
 
     const [ansBody, setAnsBody] = useState("Input your answer here...");
     const [success, setSuccess] = useState(false);
+    const [selectTopic, setAnsTopic] = useState(TOPIC_DEFAULT);
+    const [list, setList] = useState([]);
+
+    useEffect(() => {
+        let mounted = true;
+        getTopic().then((items) => {
+            if (mounted) {
+                setList(items);
+            }
+        });
+        return () => (mounted = false);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,6 +38,9 @@ const AddAnswer = ({ qid }) => {
         formData.append("uid", uid);
         formData.append("qid", tqid);
         formData.append("body", ansBody);
+        if(selectTopic.value>0){
+            formData.append("tid", selectTopic.value)
+        }
 
         const addAns = {
             method: "POST",
@@ -33,6 +52,7 @@ const AddAnswer = ({ qid }) => {
         await fetch(ADDANS_URL, addAns);
 
         setAnsBody("");
+        setAnsTopic("");
         setSuccess(true);
         console.log(success);
     };
@@ -62,8 +82,11 @@ const AddAnswer = ({ qid }) => {
                                     }}
                                     required
                                 />
-                                <label htmlFor="topic">Topics: </label>
-
+                                <Select
+                                    value={selectTopic}
+                                    onChange={setAnsTopic}
+                                    options={list}
+                                />
                                 <br />
                                 <button>Submit Answer</button>
                             </form>

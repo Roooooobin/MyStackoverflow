@@ -23,6 +23,7 @@ class SearchResult extends React.Component {
     }
 
     state = {
+        topics: null,
         results: null,
         q: null,
     };
@@ -31,15 +32,22 @@ class SearchResult extends React.Component {
         const q = this.props.q;
         this.setState({ q });
         // GET request using fetch with async/await
+
         const response = await fetch(
             `http://0.0.0.0:8080/keyword_search/list?keyword=${q}`
         );
         const results = await response.json();
-        this.setState({ results });
+
+
+        const rspTopic = await fetch(`http://0.0.0.0:8080/topic/list`);
+        const resTopic = await rspTopic.json();
+        const topics = resTopic.data;
+        console.log("search reasult topic ", topics)
+        this.setState({ topics, results });
     }
 
     render() {
-        const { results } = this.state;
+        const { topics, results } = this.state;
         let lister;
         if (results) {
             if (Object.keys(results.data.questions).length !== 0) {
@@ -71,7 +79,7 @@ class SearchResult extends React.Component {
                         Sorry, We don't find any question about "{this.state.q}
                         "!
                     </h2>
-                    <AddQuestion />
+                    <AddQuestion/>
                 </>
             );
         }

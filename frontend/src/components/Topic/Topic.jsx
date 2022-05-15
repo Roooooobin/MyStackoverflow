@@ -1,11 +1,11 @@
 import Select from "react-select";
 import React, { useState } from "react";
 
-const options = [
-    { value: "1", label: "1" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-];
+// const options = [
+//     { value: "1", label: "1" },
+//     { value: "strawberry", label: "Strawberry" },
+//     { value: "vanilla", label: "Vanilla" },
+// ];
 
 class Topic extends React.Component {
     state = {
@@ -18,14 +18,14 @@ class Topic extends React.Component {
         );
     };
 
-    // async componentDidMount() {
-    //     const response = await fetch(`http://0.0.0.0:8080/topic/list`);
-    //     const results = await response.json();
-    //     this.setState({ options: results.data })
-    // }
+    async componentDidMount() {
+        const response = await fetch(`http://0.0.0.0:8080/topic/list`);
+        const results = await response.json();
+        this.setState({ options: results.data })
+    }
 
     render() {
-        const { selectedOption } = this.state;
+        const { options, selectedOption } = this.state;
 
         return (
             <Select
