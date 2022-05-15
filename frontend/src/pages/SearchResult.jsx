@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import Header from "../components/Header/Header";
 import Lister from "../components/Lister/Lister";
 import AddQuestion from "../components/Question/AddQuestion";
+import QuestionCard from "../components/Question/QuestionCard";
 
 function Result() {
     const params = useParams();
@@ -53,11 +54,11 @@ class SearchResult extends React.Component {
                 lister = (
                     <div>
                         <h2>The results for "{this.state.q}" are:</h2>{" "}
-                        <Lister
-                            totalData={results.data.questions}
-                            question={true}
-                            currUid={-1}
-                        />
+                        <ul className="index">
+                            {results.data.questions.map(function (data) {
+                                return <QuestionCard data={data} />;
+                            })}
+                        </ul>
                     </div>
                 );
             } else {

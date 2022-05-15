@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../../components/Header/Header";
 import Lister from "../../components/Lister/Lister";
 import AddQuestion from "../../components/Question/AddQuestion";
+import QuestionCard from "../../components/Question/QuestionCard";
 
 class Home extends React.Component {
     state = {
@@ -24,7 +25,11 @@ class Home extends React.Component {
                 <br />
                 <AddQuestion />
                 <div className="listQuestions">
-                    {results && <Lister totalData={results["data"]} question={true} currUid={-1}/>}
+                    {results &&  <ul className="index">
+                            {results.data.map(function (data) {
+                                return <QuestionCard data={data} />;
+                            })}
+                        </ul>}
                 </div>
             </div>
         );
