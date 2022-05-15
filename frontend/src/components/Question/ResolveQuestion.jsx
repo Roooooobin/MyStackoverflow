@@ -1,11 +1,11 @@
 import React from "react";
 import {FcOk} from "react-icons/fc";
-import "./AnswerLike.scss";
+import "./QuestionLike.scss";
 import getCurrUid from "../../api/getCurrUid"
 
-const ADDQUESLIKE_URL = "http://0.0.0.0:8080/answer/select";
+const ADDQUESLIKE_URL = "http://0.0.0.0:8080/question/resolve";
 
-class SelectBest extends React.Component {
+class ResolveQuestion extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,34 +18,36 @@ class SelectBest extends React.Component {
         if (uid < 0) {
             alert("please login first!!");
         } else {
-            const aid = this.props.aid;
+
+            const qid = this.props.qid[0];
 
             let formData = new FormData();
             formData.append("uid", uid);
-            formData.append("aid", aid);
+            formData.append("qid", qid);
 
-            const addAnsLike = {
+            const addQuesLike = {
                 method: "POST",
                 // headers: { 'content-type': 'multipart/form-data' },
                 withCredentials: true,
                 body: formData,
             };
 
-            const response = await fetch(ADDQUESLIKE_URL, addAnsLike);
+            const response = await fetch(ADDQUESLIKE_URL, addQuesLike);
             if (response.headers.get("Content-Length") > 0) {
-                alert("Can not select a best answer if you are not the user who post the question!");
+                alert("You have already mark this question as resolved!!!");
             } else {
                 this.setState({
                     clicked: true,
                 });
             }
+
         }
     };
 
     render() {
         return (
             <div className="like">
-                <button value={'select'} onClick={this.handleClick}>
+                <button value={"resolve"} onClick={this.handleClick}>
                     <FcOk/>
                 </button>
             </div>
@@ -53,4 +55,4 @@ class SelectBest extends React.Component {
     }
 }
 
-export default SelectBest;
+export default ResolveQuestion;

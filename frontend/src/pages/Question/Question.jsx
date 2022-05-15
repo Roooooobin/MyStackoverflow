@@ -8,6 +8,8 @@ import Lister from "../../components/Lister/Lister";
 import AddAnswer from "../../components/Answer/AddAnswer";
 import QuestionLike from "../../components/Question/QuestionLike";
 import CheckAuth from "../../api/CheckAuth";
+import ResolveQuestion from "../../components/Question/ResolveQuestion";
+import getCurrUid from "../../api/getCurrUid";
 
 function Question() {
     const {curUser} = CheckAuth()
@@ -66,6 +68,7 @@ class QuestionHelper extends React.Component {
     }
 
     render() {
+        const curId = getCurrUid();
         const { question, answers, quser } = this.state;
         let qpart, apart;
         if (question) {
@@ -101,6 +104,12 @@ class QuestionHelper extends React.Component {
                         <div className="like">
                             <QuestionLike likes={data.Likes} qid={qid} uid={this.props.currUid}/>
                         </div>
+                    </div>
+                    <br />
+                    <div className="like">
+                        {curId === question.data.Uid.toString() ?
+                        <ResolveQuestion likes={data.Likes} qid={qid} uid={this.props.currUid}/>
+                            : ''}
                     </div>
                 </div>
             );
