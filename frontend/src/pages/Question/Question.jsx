@@ -81,10 +81,17 @@ class QuestionHelper extends React.Component {
                             {quser && (
                                 <div>
                                     Posted by:{" "}
-                                    <Link to={`/profile/${quser.data.Uid}`}>{quser.data.Username}</Link>
+                                    <Link to={`/profile/${quser.data.Uid}`}>
+                                        {quser.data.Username}
+                                    </Link>
                                 </div>
                             )}
                             <p className="time">{datetime}</p>
+                            {data.Topics && <p>Topics: {data["Topics"]}</p>}
+                            {data["NumOfAnswer"] && (
+                                <p>Number of Ansers: {data["NumOfAnswer"]}</p>
+                            )}
+                            {/* <p>{question}</p> */}
                         </div>
                         <p className="like">Likes: {data["Likes"]}</p>
                     </div>
@@ -96,12 +103,18 @@ class QuestionHelper extends React.Component {
             if (Object.keys(data).length !== 0) {
                 apart = (
                     <div className="answersPart">
-                        <div className="addAnswer"><AddAnswer qid={this.props.qid}/></div>
+                        <div className="addAnswer">
+                            <AddAnswer qid={this.props.qid} />
+                        </div>
                         <Lister totalData={answers.data} answer={true} />
                     </div>
                 );
             } else {
-                apart = <div className="addAnswer"><AddAnswer qid={this.props.qid}/></div>;
+                apart = (
+                    <div className="addAnswer">
+                        <AddAnswer qid={this.props.qid} />
+                    </div>
+                );
             }
         }
 
