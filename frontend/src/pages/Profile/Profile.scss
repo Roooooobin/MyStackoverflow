@@ -1,18 +1,23 @@
 // .main{
-//     display: flex;
 //     width: 100%;
-//     flex-direction: column;
-//     justify-content: center;
+//     text-align: center;
+
+    
+//     .logout{
+//         width: 50%;
+        
+//     }
 // }
 
 .profilePart{
     display: block;
     width: 80%;
-    
+    height: 300px;
+    text-align: left;
     margin: 1em;
     padding: 1em;
     border: 1px solid blue;
-    align-self: center;
+    align-items: center;
     border-radius: 1rem;
     
 
@@ -33,7 +38,7 @@
     }
 
     .btm-line{
-        height: 30px;
+        height: 60px;
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -49,5 +54,13 @@
             p{padding-left: 10px;}
 
         }
+    }
+
+    .logout{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
     }
 }

@@ -56,6 +56,7 @@ class SearchResult extends React.Component {
                         <Lister
                             totalData={results.data.questions}
                             question={true}
+                            currUid={-1}
                         />
                     </div>
                 );

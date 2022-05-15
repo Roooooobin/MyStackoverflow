@@ -59,6 +59,7 @@ const SignUp = () => {
             const userData = userResult.data;
             
             setAuth({ userData });
+            localStorage.setItem("uid", uid)
 
             setUsername("");
             setPwd("");

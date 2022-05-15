@@ -9,6 +9,7 @@ import Select from "react-select";
 import { useEffect } from "react";
 import { getTopic } from "../../api/getTopic";
 import "./AddQuestion.scss";
+import getCurrUid from "../../api/getCurrUid";
 
 const ADDQUES_URL = "http://0.0.0.0:8080/question/add";
 const BODY_DEFAULT = "Input your details here...";
@@ -16,7 +17,8 @@ const TITLE_DEFAULT = "Input your Question Title here...";
 const TOPIC_DEFAULT = "Select Topics";
 
 const AddQuestion = () => {
-    const { userData } = CheckAuth();
+    // const { userData } = CheckAuth();
+    const uid = getCurrUid()
 
     const [quesBody, setQuesBody] = useState(BODY_DEFAULT);
     const [quesTitle, setQuesTitle] = useState(TITLE_DEFAULT);
@@ -37,7 +39,7 @@ const AddQuestion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (quesBody !== BODY_DEFAULT && quesTitle !== TITLE_DEFAULT) {
-            const uid = userData.Uid;
+            const uid = uid;
 
             let formData = new FormData();
             formData.append("uid", uid);
@@ -79,7 +81,7 @@ const AddQuestion = () => {
                 </section>
             ) : (
                 <section>
-                    {userData ? (
+                    {uid>0 ? (
                         <section className="AddQuestion">
                             <form onSubmit={handleSubmit}>
                                 <textarea

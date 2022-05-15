@@ -1,35 +1,42 @@
 import { useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useState, useEffect } from "react";
+import getCurrUid from "./getCurrUid";
+import { getUserData } from "./getUserData";
 
 const CheckAuth = () => {
-    // const localUid = localStorage.getItem("uid");
-    // const [userData, setUserData] = useState({});
-
-    // useEffect(() => {
-    //     // GET request using fetch inside useEffect React hook
-    //     if (localUid > 0) {
-    //         fetch(`http://0.0.0.0:8080/user/get?uid=${20}`)
-    //             .then((response) => response.json())
-    //             .then((data) => setUserData(data.data));
-    //     }
-    // }, []);
-    // console.log(userData);
-
-    // // const { auth } = useAuth();
-
-    // // if(auth?.uid){
-    // //     console.log("has data")
-    // // }
-
-
-
-    // return userData;
-
+    const localUid = getCurrUid();
+    const [userData, setUserData] = useState({});
     const { auth } = useAuth();
-    const location = useLocation();
 
-    // console.log(auth);
+    useEffect(() => {
+        // GET request using fetch inside useEffect React hook
+        let mounted = true;
+        if(localUid > 0 && !auth?.uid){
+            getUserData(localUid).then((data)=>{
+                if(mounted){
+                    setUserData(data)
+                    auth = userData
+                }
+            });
+        }
+        return () => (mounted = false)
+    }, []);
+
+    console.log(userData);
+
+    // const { auth } = useAuth();
+
+    // if(auth?.uid){
+    //     console.log("has data")
+    // }
+
+
+
+    
+
+    // const { auth } = useAuth();
+    // const location = useLocation();
 
     return (
         auth

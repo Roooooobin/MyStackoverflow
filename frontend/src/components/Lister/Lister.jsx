@@ -41,6 +41,7 @@ class Lister extends React.Component {
     }
 
     render() {
+        const currUid = this.props.currUid;
         return (
             <div className="main">
                 <div className="top_bar"></div>
@@ -52,11 +53,15 @@ class Lister extends React.Component {
                             })}
                         </ul>
                     )}
-                    {this.props.answer && (<ul className="index">
+                    {this.props.answer && (
+                        <ul className="index">
                             {this.state.indexList.map(function (data) {
-                                return <AnswerCard data={data} />;
+                                return (
+                                    <AnswerCard data={data} currUid={currUid} />
+                                );
                             })}
-                        </ul>)}
+                        </ul>
+                    )}
 
                     <PageButton {...this.state} pageNext={this.pageNext} />
                 </div>

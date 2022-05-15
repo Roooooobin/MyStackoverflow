@@ -61,7 +61,10 @@ class QuestionCard extends React.Component {
                     </div>
                     {data.Topics && <p>Topics: {data["Topics"]}</p>}
                     <p>Number of Ansers: {data["NumOfAnswer"]}</p>
-                    <p className="like">Likes: {data["Likes"]}</p>
+                    <div>
+                        <p className="like">Likes: {data["Likes"]}</p>
+                    </div>
+                    
                 </div>
             </div>
         );

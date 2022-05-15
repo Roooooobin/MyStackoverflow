@@ -24,7 +24,7 @@ class Home extends React.Component {
                 <br />
                 <AddQuestion />
                 <div className="listQuestions">
-                    {results && <Lister totalData={results["data"]} question={true}/>}
+                    {results && <Lister totalData={results["data"]} question={true} currUid={-1}/>}
                 </div>
             </div>
         );

@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import Header from "../../components/Header/Header";
-import { FcOk } from "react-icons/fc";
+import { FcOk, FcLike } from "react-icons/fc";
 import "./Question.scss";
 import { Link } from "react-router-dom";
 import Lister from "../../components/Lister/Lister";
 import AddAnswer from "../../components/Answer/AddAnswer";
+import QuestionLike from "../../components/Question/QuestionLike";
+import CheckAuth from "../../api/CheckAuth";
 
 function Question() {
+    const {curUser} = CheckAuth()
     const params = useParams();
     const qid = useState(params.qid);
 
     return (
         <div>
-            <QuestionHelper qid={qid} />
+            <QuestionHelper qid={qid} currUid={curUser?.Uid}/>
         </div>
     );
 }
@@ -29,13 +32,13 @@ var toTime = function (dateStr) {
 class QuestionHelper extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            question: null,
+            answers: null,
+            quser: null,
+            Likes: null,
+        };
     }
-
-    state = {
-        question: null,
-        answers: null,
-        quser: null,
-    };
 
     async componentDidMount() {
         const qid = this.props.qid;
@@ -55,13 +58,18 @@ class QuestionHelper extends React.Component {
         );
         const quser = await respUser.json();
 
-        this.setState({ question, answers, quser });
+        this.setState({
+            question,
+            answers,
+            quser,
+        });
     }
 
     render() {
         const { question, answers, quser } = this.state;
         let qpart, apart;
         if (question) {
+            const qid = this.props.qid
             const data = question.data;
             const isResolved = data["IsResolved"] === 1;
             const datetime = toTime(data["Time"]);
@@ -91,9 +99,10 @@ class QuestionHelper extends React.Component {
                             {data["NumOfAnswer"] && (
                                 <p>Number of Ansers: {data["NumOfAnswer"]}</p>
                             )}
-                            {/* <p>{question}</p> */}
                         </div>
-                        <p className="like">Likes: {data["Likes"]}</p>
+                        <div className="like">
+                            <QuestionLike likes={data.Likes} qid={qid} uid={this.props.currUid}/>
+                        </div>
                     </div>
                 </div>
             );
@@ -106,7 +115,7 @@ class QuestionHelper extends React.Component {
                         <div className="addAnswer">
                             <AddAnswer qid={this.props.qid} />
                         </div>
-                        <Lister totalData={answers.data} answer={true} />
+                        <Lister totalData={answers.data} answer={true} currUid={this.props.currUid}/>
                     </div>
                 );
             } else {
