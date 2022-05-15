@@ -52,7 +52,7 @@ class SearchResult extends React.Component {
             if (Object.keys(results.data.questions).length !== 0) {
                 lister = (
                     <div>
-                        <h2>The result for "{this.state.q}" is:</h2>{" "}
+                        <h2>The results for "{this.state.q}" are:</h2>{" "}
                         <Lister
                             totalData={results.data.questions}
                             question={true}
