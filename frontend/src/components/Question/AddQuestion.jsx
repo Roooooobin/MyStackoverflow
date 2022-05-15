@@ -17,7 +17,7 @@ const TITLE_DEFAULT = "Input your Question Title here...";
 const TOPIC_DEFAULT = "Select Topics";
 
 const AddQuestion = () => {
-    const uid = getCurrUid()
+    const uid = getCurrUid();
 
     const [quesBody, setQuesBody] = useState("");
     const [quesTitle, setQuesTitle] = useState("");
@@ -38,15 +38,13 @@ const AddQuestion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (quesBody !== BODY_DEFAULT && quesTitle !== TITLE_DEFAULT) {
-
             let formData = new FormData();
             formData.append("uid", uid);
             formData.append("body", quesBody);
             formData.append("title", quesTitle);
-            if(selectTopic.value>0){
-                formData.append("tid", selectTopic.value)
+            if (selectTopic.value > 0) {
+                formData.append("tid", selectTopic.value);
             }
-
 
             const addAns = {
                 method: "POST",
@@ -78,7 +76,7 @@ const AddQuestion = () => {
                 </section>
             ) : (
                 <section>
-                    {uid>0 ? (
+                    {uid > 0 ? (
                         <section className="AddQuestion">
                             <form onSubmit={handleSubmit}>
                                 <textarea
