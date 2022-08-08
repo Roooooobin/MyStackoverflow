@@ -8,6 +8,7 @@ import (
 	"MyStackoverflow/handler/question"
 	"MyStackoverflow/handler/topic"
 	"MyStackoverflow/handler/user"
+	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 )
 
@@ -120,6 +121,8 @@ func main() {
 	r := RegisterRouter()
 	// pre-computed cache
 	cache.Init()
+	// redis
+	rds.Init()
 	// start cronjob
 	cronjob.Init()
 	// listen and serve on 0.0.0.0:8080

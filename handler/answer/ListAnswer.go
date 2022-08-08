@@ -1,12 +1,12 @@
 package answer
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/answertopicsdao"
 	"MyStackoverflow/model"
+	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -66,10 +66,11 @@ func ListAnswer(c *gin.Context) {
 	}
 	for _, answerTopic := range answerTopics {
 		_, ok := answerToTopicsMap[answerTopic.Aid]
+		topicName, _ := rds.RedisClient.Get(string(rune(answerTopic.Tid))).Result()
 		if !ok {
-			answerToTopicsMap[answerTopic.Aid] = cache.TopicID2Name[answerTopic.Tid] + ","
+			answerToTopicsMap[answerTopic.Aid] = topicName + ","
 		} else {
-			answerToTopicsMap[answerTopic.Aid] += cache.TopicID2Name[answerTopic.Tid] + ","
+			answerToTopicsMap[answerTopic.Aid] += topicName + ","
 		}
 	}
 	answerWithDetails := make([]*model.AnswerWithDetails, 0)

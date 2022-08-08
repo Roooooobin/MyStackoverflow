@@ -1,4 +1,4 @@
-package cache
+package rds
 
 import (
 	"MyStackoverflow/dao"
@@ -6,16 +6,12 @@ import (
 	"MyStackoverflow/model"
 )
 
-var TopicID2Name map[int]string
+func GetTopicNameByID() {
 
-func GetTopicNameByID() map[int]string {
-
-	topicID2Name := make(map[int]string)
 	sql := dao.MyDB.Table(topicsdao.TableTopics)
 	allTopics := make([]*model.Topic, 0)
 	sql.Find(&allTopics)
 	for _, topic := range allTopics {
-		topicID2Name[topic.Tid] = topic.TopicName
+		RedisClient.Set(string(rune(topic.Tid)), topic.TopicName, 0)
 	}
-	return topicID2Name
 }

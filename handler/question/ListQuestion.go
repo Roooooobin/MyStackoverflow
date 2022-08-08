@@ -1,13 +1,13 @@
 package question
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
 	"MyStackoverflow/model"
+	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -98,10 +98,11 @@ func ListQuestion(c *gin.Context) {
 	}
 	for _, questionTopic := range questionTopics {
 		_, ok := questionToTopicsMap[questionTopic.Qid]
+		topicName, _ := rds.RedisClient.Get(string(rune(questionTopic.Tid))).Result()
 		if !ok {
-			questionToTopicsMap[questionTopic.Qid] = cache.TopicID2Name[questionTopic.Tid] + ","
+			questionToTopicsMap[questionTopic.Qid] = topicName + ","
 		} else {
-			questionToTopicsMap[questionTopic.Qid] += cache.TopicID2Name[questionTopic.Tid] + ","
+			questionToTopicsMap[questionTopic.Qid] += topicName + ","
 		}
 	}
 	questionWithDetails := make([]*model.QuestionWithDetails, 0)

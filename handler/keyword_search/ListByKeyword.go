@@ -1,7 +1,6 @@
 package keyword_search
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
@@ -11,6 +10,7 @@ import (
 	"MyStackoverflow/dao/usersdao"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
+	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"sort"
@@ -182,10 +182,11 @@ func ListByKeyword(c *gin.Context) {
 		}
 		for _, questionTopic := range questionTopics {
 			_, ok := questionToTopicsMap[questionTopic.Qid]
+			topicName, _ := rds.RedisClient.Get(string(rune(questionTopic.Tid))).Result()
 			if !ok {
-				questionToTopicsMap[questionTopic.Qid] = cache.TopicID2Name[questionTopic.Tid] + ","
+				questionToTopicsMap[questionTopic.Qid] = topicName + ","
 			} else {
-				questionToTopicsMap[questionTopic.Qid] += cache.TopicID2Name[questionTopic.Tid] + ","
+				questionToTopicsMap[questionTopic.Qid] += topicName + ","
 			}
 		}
 		questionsWithDetails := make([]*model.QuestionWithDetails, 0)
