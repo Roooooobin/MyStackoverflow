@@ -24,7 +24,7 @@ func Find(where string, values ...interface{}) (*model.Answer, error) {
 	answer := &model.Answer{}
 	res := dao.MyDB.Table(TableAnswers).Where(where, values...).First(&answer)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		return nil, errors.New("record not found")
+		return nil, res.Error
 	}
 	return answer, nil
 }
@@ -34,7 +34,7 @@ func List(where string, values ...interface{}) ([]*model.Answer, error) {
 	answers := make([]*model.Answer, 0)
 	res := dao.MyDB.Table(TableAnswers).Where(where, values...).Find(&answers)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		return nil, errors.New("record not found")
+		return nil, res.Error
 	}
 	return answers, nil
 }

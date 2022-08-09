@@ -27,7 +27,7 @@ func Find(where string, values ...interface{}) (*model.User, error) {
 	user := &model.User{}
 	res := dao.MyDB.Table(TableUsers).Where(where, values...).First(&user)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		return nil, errors.New("record not found")
+		return nil, res.Error
 	}
 	return user, nil
 }
@@ -37,7 +37,7 @@ func List(where string, values ...interface{}) ([]*model.User, error) {
 	users := make([]*model.User, 0)
 	res := dao.MyDB.Table(TableUsers).Where(where, values...).Find(&users)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		return nil, errors.New("record not found")
+		return nil, res.Error
 	}
 	return users, nil
 }
