@@ -1,13 +1,13 @@
 package question
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
+	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
@@ -60,8 +60,10 @@ func AddQuestion(c *gin.Context) {
 		if errR != nil {
 			return errR
 		}
-		tids := cache.ParentTopics[rootTid]
-		for _, tid := range tids {
+		key := rds.FormParentsKey(rootTid)
+		tids, _ := rds.RedisClient.LRange(key, 0, -1).Result()
+		for _, ttid := range tids {
+			tid, _ := strconv.Atoi(ttid)
 			questionTopic := &model.QuestionTopic{
 				Qid: qid,
 				Tid: tid,

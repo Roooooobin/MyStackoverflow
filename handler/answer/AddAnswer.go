@@ -1,13 +1,13 @@
 package answer
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/answersdao"
 	"MyStackoverflow/dao/answertopicsdao"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
+	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
@@ -63,8 +63,10 @@ func AddAnswer(c *gin.Context) {
 			return err
 		}
 		// needs to find all related topics by the hierarchy and insert into table `AnswerTopic`
-		tids := cache.ParentTopics[rootTid]
-		for _, tid := range tids {
+		key := rds.FormParentsKey(rootTid)
+		tids, _ := rds.RedisClient.LRange(key, 0, -1).Result()
+		for _, ttid := range tids {
+			tid, _ := strconv.Atoi(ttid)
 			answerTopic := &model.AnswerTopic{
 				Aid: aid,
 				Tid: tid,

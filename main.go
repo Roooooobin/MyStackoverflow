@@ -1,7 +1,6 @@
 package main
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/cronjob"
 	"MyStackoverflow/handler/answer"
 	"MyStackoverflow/handler/keyword_search"
@@ -119,8 +118,8 @@ func CORSMiddleware() gin.HandlerFunc {
 
 func main() {
 	r := RegisterRouter()
-	// pre-computed cache
-	cache.Init()
+	//// pre-computed cache(deprecated)
+	//cache.Init()
 	// redis
 	rds.Init()
 	// start cronjob

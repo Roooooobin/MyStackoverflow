@@ -2,6 +2,9 @@ package rds
 
 func Init() {
 
-	RedisClient = NewRedisClient()
+	if RedisClient == nil {
+		RedisClient = NewRedisClient()
+	}
 	GetTopicNameByID()
+	GetParentTopics()
 }

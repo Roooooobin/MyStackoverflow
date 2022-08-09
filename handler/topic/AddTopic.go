@@ -1,11 +1,11 @@
 package topic
 
 import (
-	"MyStackoverflow/cache"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao/topichierarchydao"
 	"MyStackoverflow/dao/topicsdao"
 	"MyStackoverflow/model"
+	"MyStackoverflow/rds"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -46,5 +46,5 @@ func AddTopic(c *gin.Context) {
 		errMsg = err.Error()
 		return
 	}
-	cache.Init()
+	rds.Init()
 }
