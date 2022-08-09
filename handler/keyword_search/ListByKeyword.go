@@ -182,7 +182,7 @@ func ListByKeyword(c *gin.Context) {
 		}
 		for _, questionTopic := range questionTopics {
 			_, ok := questionToTopicsMap[questionTopic.Qid]
-			topicName, _ := rds.RedisClient.Get(string(rune(questionTopic.Tid))).Result()
+			topicName, _ := rds.RedisClient.Get(strconv.Itoa(questionTopic.Tid)).Result()
 			if !ok {
 				questionToTopicsMap[questionTopic.Qid] = topicName + ","
 			} else {

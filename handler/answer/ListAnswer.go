@@ -9,6 +9,7 @@ import (
 	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -66,7 +67,7 @@ func ListAnswer(c *gin.Context) {
 	}
 	for _, answerTopic := range answerTopics {
 		_, ok := answerToTopicsMap[answerTopic.Aid]
-		topicName, _ := rds.RedisClient.Get(string(rune(answerTopic.Tid))).Result()
+		topicName, _ := rds.RedisClient.Get(strconv.Itoa(answerTopic.Tid)).Result()
 		if !ok {
 			answerToTopicsMap[answerTopic.Aid] = topicName + ","
 		} else {
