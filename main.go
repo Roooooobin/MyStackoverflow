@@ -2,6 +2,7 @@ package main
 
 import (
 	"MyStackoverflow/cronjob"
+	"MyStackoverflow/es"
 	"MyStackoverflow/handler/answer"
 	"MyStackoverflow/handler/keyword_search"
 	"MyStackoverflow/handler/question"
@@ -124,6 +125,8 @@ func main() {
 	rds.Init()
 	// start cronjob
 	cronjob.Init()
+	// elasticsearch
+	es.Init()
 	// listen and serve on 0.0.0.0:8080
 	err := r.Run()
 	if err != nil {

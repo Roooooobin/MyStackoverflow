@@ -1,4 +1,4 @@
-package main
+package es
 
 import (
 	"fmt"
@@ -7,7 +7,14 @@ import (
 	"os"
 )
 
-func NewEsClient() *elastic.Client {
+var esClient *elastic.Client
+
+func Init() {
+
+	esClient = newEsClient()
+}
+
+func newEsClient() *elastic.Client {
 
 	url := fmt.Sprintf("http://%s:%d", "127.0.0.1", 9200)
 	client, err := elastic.NewClient(

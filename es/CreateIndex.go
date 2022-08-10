@@ -1,15 +1,14 @@
-package main
+package es
 
 import (
 	"context"
 	"fmt"
 )
 
-func CreateIndex(mapping string) error {
-	client := NewEsClient()
-	indexName := "users"
+func CreateIndex(indexName, mapping string) error {
+
 	ctx := context.Background()
-	createIndex, err := client.CreateIndex(indexName).BodyString(mapping).Do(ctx)
+	createIndex, err := esClient.CreateIndex(indexName).BodyString(mapping).Do(ctx)
 	if err != nil {
 		panic(err)
 	}

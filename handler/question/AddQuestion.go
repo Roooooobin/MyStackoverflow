@@ -5,6 +5,7 @@ import (
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
+	"MyStackoverflow/es"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
 	"MyStackoverflow/rds"
@@ -73,6 +74,8 @@ func AddQuestion(c *gin.Context) {
 				return err
 			}
 		}
+		// add the question to es
+		es.AddQuestion(question)
 		return nil
 	})
 	if errTx != nil {
