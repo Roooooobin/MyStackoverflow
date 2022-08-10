@@ -64,7 +64,7 @@ func AddAnswer(c *gin.Context) {
 		}
 		// needs to find all related topics by the hierarchy and insert into table `AnswerTopic`
 		key := rds.FormParentsKey(rootTid)
-		tids, _ := rds.RedisClient.LRange(key, 0, -1).Result()
+		tids, _ := rds.GetListValues(key)
 		for _, ttid := range tids {
 			tid, _ := strconv.Atoi(ttid)
 			answerTopic := &model.AnswerTopic{

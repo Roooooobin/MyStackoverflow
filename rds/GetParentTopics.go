@@ -38,9 +38,9 @@ func GetParentTopics() {
 			}
 		}
 		key := FormParentsKey(tid)
-		RedisClient.Del(key)
+		_ = DeleteKey(key)
 		for _, p := range parentTids {
-			RedisClient.RPush(key, p)
+			_ = RPush(key, p)
 		}
 	}
 	//var cursor uint64

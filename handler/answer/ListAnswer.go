@@ -67,7 +67,7 @@ func ListAnswer(c *gin.Context) {
 	}
 	for _, answerTopic := range answerTopics {
 		_, ok := answerToTopicsMap[answerTopic.Aid]
-		topicName, _ := rds.RedisClient.Get(strconv.Itoa(answerTopic.Tid)).Result()
+		topicName, _ := rds.GetValue(strconv.Itoa(answerTopic.Tid))
 		if !ok {
 			answerToTopicsMap[answerTopic.Aid] = topicName + ","
 		} else {

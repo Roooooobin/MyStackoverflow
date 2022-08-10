@@ -68,7 +68,7 @@ func EditAnswer(c *gin.Context) {
 				return errR
 			}
 			key := rds.FormParentsKey(rootTid)
-			tids, _ := rds.RedisClient.LRange(key, 0, -1).Result()
+			tids, _ := rds.GetListValues(key)
 			for _, ttid := range tids {
 				tid, _ := strconv.Atoi(ttid)
 				answerTopic := &model.AnswerTopic{

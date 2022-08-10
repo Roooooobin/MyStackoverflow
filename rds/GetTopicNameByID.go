@@ -13,6 +13,6 @@ func GetTopicNameByID() {
 	allTopics := make([]*model.Topic, 0)
 	sql.Find(&allTopics)
 	for _, topic := range allTopics {
-		RedisClient.Set(strconv.Itoa(topic.Tid), topic.TopicName, 0)
+		_ = SetKey(strconv.Itoa(topic.Tid), topic.TopicName, 0)
 	}
 }

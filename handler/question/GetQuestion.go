@@ -53,7 +53,7 @@ func GetQuestion(c *gin.Context) {
 	}
 	for _, questionTopic := range questionTopics {
 		_, ok := questionToTopicsMap[questionTopic.Qid]
-		topicName, _ := rds.RedisClient.Get(strconv.Itoa(questionTopic.Tid)).Result()
+		topicName, _ := rds.GetValue(strconv.Itoa(questionTopic.Tid))
 		if !ok {
 			questionToTopicsMap[questionTopic.Qid] = topicName + ","
 		} else {
