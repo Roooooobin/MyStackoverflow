@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/ClickHouse/clickhouse-go/v2 v2.2.0 // indirect
 	github.com/gin-contrib/cors v1.3.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
@@ -17,7 +18,8 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/golang/protobuf v1.3.3 // indirect
+	github.com/golang/protobuf v1.5.0 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
@@ -28,9 +30,14 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
 	github.com/olivere/elastic/v7 v7.0.32 // indirect
+	github.com/paulmach/orb v0.7.1 // indirect
+	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
+	go.opentelemetry.io/otel v1.9.0 // indirect
+	go.opentelemetry.io/otel/trace v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
-	golang.org/x/sys v0.0.0-20200116001909-b77594299b42 // indirect
+	golang.org/x/sys v0.0.0-20220429233432-b5fbb4746d32 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
