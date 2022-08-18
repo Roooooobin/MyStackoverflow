@@ -1,6 +1,7 @@
 package main
 
 import (
+	"MyStackoverflow/clickhouse"
 	"MyStackoverflow/cronjob"
 	"MyStackoverflow/es"
 	"MyStackoverflow/handler/answer"
@@ -127,6 +128,8 @@ func main() {
 	cronjob.Init()
 	// elasticsearch
 	es.Init()
+	// clickhouse
+	clickhouse.Init()
 	// listen and serve on 0.0.0.0:8080
 	err := r.Run()
 	if err != nil {
