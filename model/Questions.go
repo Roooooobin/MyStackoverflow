@@ -26,3 +26,14 @@ type QuestionWithDetails struct {
 	NumOfAnswer int
 	Topics      string
 }
+
+// question struct for clickhouse
+type QuestionCH struct {
+	Qid        int64
+	Uid        int64
+	Title      string
+	Body       string
+	Time       time.Time
+	IsResolved int8
+	Likes      int32
+}

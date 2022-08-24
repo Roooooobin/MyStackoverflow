@@ -3,16 +3,15 @@ package es
 import (
 	"MyStackoverflow/model"
 	"context"
-	"fmt"
 	"strconv"
 )
 
-func AddQuestion(question *model.Question) {
+func AddQuestion(question *model.Question) error {
 
 	ctx := context.Background()
-	put1, err := esClient.Index().Index("question").Id(strconv.Itoa(question.Qid)).BodyJson(question).Do(ctx)
+	_, err := esClient.Index().Index("question").Id(strconv.Itoa(question.Qid)).BodyJson(question).Do(ctx)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	fmt.Println(put1.Index, put1.Id)
+	return nil
 }

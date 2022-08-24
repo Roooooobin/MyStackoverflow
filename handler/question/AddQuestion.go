@@ -1,6 +1,7 @@
 package question
 
 import (
+	"MyStackoverflow/clickhouse/questionsCH"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/questionsdao"
@@ -74,12 +75,23 @@ func AddQuestion(c *gin.Context) {
 				return err
 			}
 		}
-		// add the question to es
-		es.AddQuestion(question)
 		return nil
 	})
 	if errTx != nil {
 		errMsg = errTx.Error()
 		return
+	} else {
+		// add the question to es
+		err = es.AddQuestion(question)
+		if err != nil {
+			errMsg = err.Error()
+			return
+		}
+		// add the question to clickhouse
+		err = questionsCH.Insert(questionsCH.Transform(question))
+		if err != nil {
+			errMsg = err.Error()
+			return
+		}
 	}
 }
