@@ -1,14 +1,13 @@
 package main
 
 import (
-	"MyStackoverflow/clickhouse"
 	"MyStackoverflow/cronjob"
-	"MyStackoverflow/es"
 	"MyStackoverflow/handler/answer"
 	"MyStackoverflow/handler/keyword_search"
 	"MyStackoverflow/handler/question"
 	"MyStackoverflow/handler/topic"
 	"MyStackoverflow/handler/user"
+	"MyStackoverflow/mq"
 	"MyStackoverflow/rds"
 	"github.com/gin-gonic/gin"
 )
@@ -127,9 +126,12 @@ func main() {
 	// start cronjob
 	cronjob.Init()
 	// elasticsearch
-	es.Init()
+	//es.Init()
 	// clickhouse
-	clickhouse.Init()
+	//clickhouse.Init()
+	// mq
+	mq.InitProducer()
+	mq.InitConsumer()
 	// listen and serve on 0.0.0.0:8080
 	err := r.Run()
 	if err != nil {

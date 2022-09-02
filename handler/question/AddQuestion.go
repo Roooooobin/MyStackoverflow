@@ -1,15 +1,17 @@
 package question
 
 import (
-	"MyStackoverflow/clickhouse/questionsCH"
 	"MyStackoverflow/common"
 	"MyStackoverflow/dao"
 	"MyStackoverflow/dao/questionsdao"
 	"MyStackoverflow/dao/questiontopicsdao"
-	"MyStackoverflow/es"
 	"MyStackoverflow/function"
 	"MyStackoverflow/model"
+	"MyStackoverflow/mq"
 	"MyStackoverflow/rds"
+	"context"
+	"fmt"
+	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"strconv"
@@ -82,16 +84,28 @@ func AddQuestion(c *gin.Context) {
 		return
 	} else {
 		// add the question to es
-		err = es.AddQuestion(question)
-		if err != nil {
-			errMsg = err.Error()
-			return
-		}
+		//err = es.AddQuestion(question)
+		//if err != nil {
+		//	errMsg = err.Error()
+		//	return
+		//}
 		// add the question to clickhouse
-		err = questionsCH.Insert(questionsCH.Transform(question))
+		//err = questionsCH.Insert(questionsCH.Transform(question))
+		//if err != nil {
+		//	errMsg = err.Error()
+		//	return
+		//}
+		// add message to mq
+		msg := &primitive.Message{
+			Topic: "questions",
+			Body:  []byte(strconv.Itoa(question.Uid) + ":" + question.Body),
+		}
+		// 发送信息
+		err = mq.P.SendOneWay(context.Background(), msg)
 		if err != nil {
-			errMsg = err.Error()
-			return
+			fmt.Printf("send message error:%s\n", err)
+		} else {
+			fmt.Printf("send message success\n")
 		}
 	}
 }
